@@ -152,14 +152,14 @@
         <executions>
           <execution>
             <id>compile</id>
-            <phase>prepare-sources</phase>
+            <phase>process-sources</phase>
             <goals>
               <goal>compile</goal>
             </goals>
           </execution>
           <execution>
             <id>test-compile</id>
-            <phase>prepare-test-sources</phase>
+            <phase>process-test-sources</phase>
             <goals>
               <goal>test-compile</goal>
             </goals>

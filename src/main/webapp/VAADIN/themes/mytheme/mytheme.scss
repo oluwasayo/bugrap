@@ -35,4 +35,56 @@
   @include valo;
 
   // Insert your own theme rules here
+
+  .rounded-east {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .rounded-west {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+  }
+
+  .rounded-north {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  .rounded-south {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .menubar-tiny {
+    vertical-align: middle;
+  }
+
+  .label-dark {
+    background: #6d6d6d;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  .label-gray {
+    background: #6d6d6d;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  .label-light {
+    background: #6d6d6d;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  .v-select-select {
+    -webkit-appearance: none;
+    //height: 28px;
+    //font-size: 12px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
 }

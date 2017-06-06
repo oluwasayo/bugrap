@@ -1,17 +1,23 @@
-package com.vaadin.bugrap.core
+package org.vaadin.bugrap.core
 
-import com.vaadin.bugrap.events.LogoutEvent
-import com.vaadin.bugrap.events.ProjectChangeEvent
-import com.vaadin.bugrap.events.VersionChangeEvent
 import org.vaadin.bugrap.domain.BugrapRepository
 import org.vaadin.bugrap.domain.BugrapRepository.ReportsQuery
+import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.domain.entities.Reporter
+import org.vaadin.bugrap.events.FilterChangeEvent
+import org.vaadin.bugrap.events.LogoutEvent
+import org.vaadin.bugrap.events.ProjectChangeEvent
+import org.vaadin.bugrap.events.ReportsRefreshEvent
+import org.vaadin.bugrap.events.SearchEvent
+import org.vaadin.bugrap.events.VersionChangeEvent
+import java.io.File
 import java.io.Serializable
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
+import javax.enterprise.event.Event
 import javax.enterprise.event.Observes
 import javax.inject.Inject
 
@@ -20,10 +26,16 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ApplicationModel: Serializable {
+class ApplicationModel : Serializable {
+
+  @Inject
+  private lateinit var searchFacade: RepositorySearchFacade
 
   @Inject
   private lateinit var filter: Filter
+
+  @Inject
+  private lateinit var reportsRefreshEvent: Event<ReportsRefreshEvent>
 
   private lateinit var projects: List<Project>
   fun getProjects() = projects
@@ -45,11 +57,11 @@ class ApplicationModel: Serializable {
 
   @PostConstruct
   fun setup() {
-    user = bugrapRepository.authenticate("admin", "admin")
+    user = bugrapRepository.authenticate("developer", "developer")
     projects = bugrapRepository.findProjects().sortedBy { it.name }
     selectedProject = projects.first()
     updateVersionInfo()
-    refreshReports()
+    refreshReports(false)
   }
 
   private fun updateVersionInfo() {
@@ -57,14 +69,22 @@ class ApplicationModel: Serializable {
     selectedVersion = null
   }
 
-  private fun refreshReports() {
+  private fun refreshReports(fireEvent: Boolean = true) {
     val query = ReportsQuery().apply {
       project = selectedProject
-      projectVersion = selectedVersion
-      reportStatuses = filter.statuses
+      if (selectedVersion != null) projectVersion = selectedVersion
+      if (!filter.statuses.isEmpty()) reportStatuses = filter.statuses
       if (filter.assignedOnlyMe) reportAssignee = user
     }
+
     reports = bugrapRepository.findReports(query)
+    if (fireEvent) reportsRefreshEvent.fire(ReportsRefreshEvent())
+  }
+
+  fun searchReports(@Observes event: SearchEvent) {
+    val statuses = if (filter.statuses.isEmpty()) null else filter.statuses
+    reports = HashSet(searchFacade.search(event.searchTerm, selectedProject, selectedVersion, statuses))
+    reportsRefreshEvent.fire(ReportsRefreshEvent())
   }
 
   fun logout(@Observes event: LogoutEvent) {
@@ -74,20 +94,28 @@ class ApplicationModel: Serializable {
   fun switchProject(@Observes event: ProjectChangeEvent) {
     selectedProject = event.project!!
     updateVersionInfo()
+    refreshReports()
   }
 
   fun switchVersion(@Observes event: VersionChangeEvent) {
     selectedVersion = event.version
+    refreshReports()
+  }
+
+  fun applyFilter(@Observes event: FilterChangeEvent) {
+    refreshReports()
   }
 
   companion object {
     private const val serialVersionUID = 1L
-    private const val dbFileName = "~/bugrap/bugrap.db"
-    @JvmStatic val bugrapRepository = BugrapRepository(dbFileName)
-//    private var dbFile = File(dbFileName).apply {
-//      if (!exists()) {
-//        bugrapRepository.populateWithTestData()
-//      }
-//    }
+    private val dbDir = "${System.getProperty("user.home")}/.bugrap"
+    @JvmStatic val bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
+
+    init {
+      if (!File(dbDir).exists()) {
+        println("Bugrap DB not found in home directory. Generating test data...")
+        bugrapRepository.populateWithTestData()
+      }
+    }
   }
 }

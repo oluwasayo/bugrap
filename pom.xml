@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.vaadin.oluwasayo</groupId>
+  <groupId>org.vaadin.oluwasayo</groupId>
   <artifactId>bugrap</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
@@ -14,9 +14,9 @@
   </prerequisites>
 
   <properties>
-    <vaadin.version>8.0.5</vaadin.version>
-    <vaadin.plugin.version>8.0.5</vaadin.plugin.version>
-    <jetty.plugin.version>9.3.0.v20150612</jetty.plugin.version>
+    <vaadin.version>8.0.6</vaadin.version>
+    <vaadin.plugin.version>8.0.6</vaadin.plugin.version>
+    <jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -56,9 +56,19 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
       <groupId>org.jboss.weld.servlet</groupId>
       <artifactId>weld-servlet</artifactId>
-      <version>2.4.3.Final</version>
+      <version>2.4.0.Final</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-cdi</artifactId>
     </dependency>
     <dependency>
       <groupId>com.vaadin</groupId>
@@ -75,10 +85,6 @@
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-themes</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vaadin</groupId>
-      <artifactId>vaadin-cdi</artifactId>
     </dependency>
     <dependency>
       <groupId>org.vaadin</groupId>
@@ -110,6 +116,7 @@
           <packagingExcludes>WEB-INF/classes/VAADIN/widgetsets/WEB-INF/**</packagingExcludes>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>com.vaadin</groupId>
         <artifactId>vaadin-maven-plugin</artifactId>
@@ -126,6 +133,7 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
@@ -144,16 +152,18 @@
         </configuration>
       </plugin>
 
-      <!-- The Jetty plugin allows us to easily test the development build by
-        running jetty:run on the command line. -->
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty.plugin.version}</version>
         <configuration>
           <scanIntervalSeconds>5</scanIntervalSeconds>
+          <webApp>
+            <overrideDescriptor>src/main/webapp/WEB-INF/web-add.xml</overrideDescriptor>
+            <jettyEnvXml>src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
+          </webApp>
+
           <contextXml>src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
-          <jvmArgs>--add-to-start=cdi</jvmArgs>
         </configuration>
       </plugin>
 
@@ -176,7 +186,6 @@
           </compilerPlugins>
 
           <pluginOptions>
-            <option>all-open:annotation=com.hextremelabs.quickee.annotation.Proxyable</option>
             <option>all-open:annotation=javax.inject.Named</option>
             <option>all-open:annotation=javax.annotation.ManagedBean</option>
             <option>all-open:annotation=javax.enterprise.context.ApplicationScoped</option>
@@ -204,6 +213,7 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -251,6 +261,7 @@
           </snapshots>
         </repository>
       </repositories>
+
       <pluginRepositories>
         <pluginRepository>
           <id>vaadin-prereleases</id>

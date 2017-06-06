@@ -1,6 +1,5 @@
-package com.vaadin.bugrap.ui.reportsoverview
+package org.vaadin.bugrap.ui.reportsoverview
 
-import com.vaadin.bugrap.core.ApplicationModel
 import com.vaadin.icons.VaadinIcons.BUG
 import com.vaadin.icons.VaadinIcons.CLOSE_SMALL
 import com.vaadin.icons.VaadinIcons.COG
@@ -22,48 +21,70 @@ import com.vaadin.ui.themes.ValoTheme.BUTTON_TINY
 import com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP
 import com.vaadin.ui.themes.ValoTheme.TEXTFIELD_INLINE_ICON
 import com.vaadin.ui.themes.ValoTheme.TEXTFIELD_TINY
+import org.vaadin.bugrap.core.ApplicationModel
+import org.vaadin.bugrap.core.LABEL_DARK
+import org.vaadin.bugrap.core.MANAGE_PROJECT
+import org.vaadin.bugrap.core.REPORT_A_BUG
+import org.vaadin.bugrap.core.REQUEST_A_FEATURE
+import org.vaadin.bugrap.core.ROUNDED_EAST
+import org.vaadin.bugrap.core.ROUNDED_WEST
+import org.vaadin.bugrap.core.SEARCH_REPORTS
+import org.vaadin.bugrap.events.ProjectChangeEvent
+import org.vaadin.bugrap.events.SearchEvent
+import org.vaadin.bugrap.events.VersionChangeEvent
+import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
+import javax.enterprise.event.Event
+import javax.enterprise.event.Observes
+import javax.inject.Inject
 
 /**
  *
  * @author oladeji
  */
 @SessionScoped
-class ActionsBar: CustomComponent() {
+class ActionsBar : CustomComponent() {
 
-  @javax.inject.Inject
+  @Inject
   private lateinit var applicationModel: ApplicationModel
 
-  @javax.annotation.PostConstruct
-  fun setup() {
-    val reportBugLabel = Label("${BUG.html} Report a bug").apply { contentMode = HTML }
-    val bugSeparatorLabel1 = Label(LINE_V.html).apply { contentMode = HTML }
-    val featureLabel = Label("${PLUS.html} Request a feature").apply { contentMode = HTML }
-    val bugSeparatorLabel2 = Label(LINE_V.html).apply { contentMode = HTML }
-    val manageProjectLabel = Label("${COG.html} Manage project").apply { contentMode = HTML }
+  @Inject
+  private lateinit var searchEvent: Event<SearchEvent>
 
-    val projectCountLabel = Label("127").apply {
-      addStyleName("rounded-east")
-      addStyleName("rounded-west")
-      addStyleName("label-dark")
+  private val projectCountLabel = Label()
+
+  @PostConstruct
+  fun setup() {
+    val reportBugLabel = Label("${BUG.html} ${REPORT_A_BUG}").apply { contentMode = HTML }
+    val bugSeparatorLabel1 = Label(LINE_V.html).apply { contentMode = HTML }
+    val featureLabel = Label("${PLUS.html} ${REQUEST_A_FEATURE}").apply { contentMode = HTML }
+    val bugSeparatorLabel2 = Label(LINE_V.html).apply { contentMode = HTML }
+    val manageProjectLabel = Label("${COG.html} ${MANAGE_PROJECT}").apply { contentMode = HTML }
+
+    projectCountLabel.apply {
+      addStyleName(ROUNDED_EAST)
+      addStyleName(ROUNDED_WEST)
+      addStyleName(LABEL_DARK)
       setWidth(50f, PIXELS)
     }
 
+    updateReportCount(ProjectChangeEvent(applicationModel.getSelectedProject()))
+
     val searchField = TextField().apply {
-      placeholder = "Search reports..."
+      placeholder = SEARCH_REPORTS
       icon = SEARCH
       addStyleName(TEXTFIELD_INLINE_ICON)
       addStyleName(TEXTFIELD_TINY)
-      addStyleName("rounded-west")
+      addStyleName(ROUNDED_WEST)
       setWidth(88.2f, PERCENTAGE)
 
       valueChangeMode = LAZY
-      addValueChangeListener { e -> println("Stuff typed in search field: ${e.value}") }
+      addValueChangeListener { e -> searchEvent.fire(SearchEvent(e.value)) }
     }
 
     val clearSearchButton = Button(CLOSE_SMALL).apply {
       addStyleName(BUTTON_TINY)
-      addStyleName("rounded-east")
+      addStyleName(ROUNDED_EAST)
       addClickListener { e -> searchField.clear() }
     }
 
@@ -93,5 +114,21 @@ class ActionsBar: CustomComponent() {
     }
 
     setSizeUndefined()
+  }
+
+  private fun countReports(): String {
+    if (applicationModel.getSelectedVersion() != null) {
+      return ApplicationModel.bugrapRepository.countReports(applicationModel.getSelectedVersion()).toString()
+    }
+
+    return ApplicationModel.bugrapRepository.countReports(applicationModel.getSelectedProject()).toString()
+  }
+
+  fun updateReportCount(@Observes event: ProjectChangeEvent) {
+    projectCountLabel.value = countReports()
+  }
+
+  fun updateReportCount(@Observes event: VersionChangeEvent) {
+    projectCountLabel.value = countReports()
   }
 }

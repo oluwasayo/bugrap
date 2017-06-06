@@ -1,8 +1,5 @@
-package com.vaadin.bugrap.ui.reportsoverview
+package org.vaadin.bugrap.ui.reportsoverview
 
-import com.vaadin.bugrap.core.ApplicationModel
-import com.vaadin.bugrap.events.LogoutEvent
-import com.vaadin.bugrap.events.ProjectChangeEvent
 import com.vaadin.icons.VaadinIcons.KEY
 import com.vaadin.icons.VaadinIcons.LINE_V
 import com.vaadin.icons.VaadinIcons.USER
@@ -16,7 +13,13 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Label
 import com.vaadin.ui.NativeSelect
 import com.vaadin.ui.themes.ValoTheme
+import org.vaadin.bugrap.core.ApplicationModel
+import org.vaadin.bugrap.core.LOGOUT
+import org.vaadin.bugrap.core.ROUNDED_EAST
+import org.vaadin.bugrap.core.ROUNDED_WEST
 import org.vaadin.bugrap.domain.entities.Project
+import org.vaadin.bugrap.events.LogoutEvent
+import org.vaadin.bugrap.events.ProjectChangeEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event
@@ -45,8 +48,8 @@ class ProjectSelectorBar: CustomComponent() {
       isEmptySelectionAllowed = false
       setSelectedItem(applicationModel.getProjects().first())
 
-      addStyleName("rounded-east")
-      addStyleName("rounded-west")
+      addStyleName(ROUNDED_EAST)
+      addStyleName(ROUNDED_WEST)
       setHeight(28f, PIXELS)
 
       addSelectionListener{ e -> projectChangeEvent.fire(ProjectChangeEvent(e.selectedItem.get())) }
@@ -54,19 +57,20 @@ class ProjectSelectorBar: CustomComponent() {
 
     val userLabel = Label("${USER.html} ${applicationModel.getUsername()}").apply { contentMode = HTML }
     val separator = Label(LINE_V.html).apply { contentMode = HTML }
+    val logoutLabel = Label("${USER.html} ${LOGOUT}").apply { contentMode = HTML }
 
-    val logoutButton = Button("Logout").apply {
+    val logoutButton = Button(LOGOUT).apply {
       setIcon(KEY)
       addStyleName(ValoTheme.BUTTON_QUIET)
       addStyleName(ValoTheme.BUTTON_TINY)
-      addStyleName("rounded-east")
-      addStyleName("rounded-west")
+      addStyleName(ROUNDED_EAST)
+      addStyleName(ROUNDED_WEST)
 
       addClickListener { e -> logoutEvent.fire(LogoutEvent()) }
     }
 
     val profileSection = HorizontalLayout().apply {
-      addComponents(userLabel, separator, logoutButton)
+      addComponents(userLabel, separator, logoutLabel)
       styleName = ValoTheme.LAYOUT_COMPONENT_GROUP
     }
 

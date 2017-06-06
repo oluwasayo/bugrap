@@ -1,4 +1,4 @@
-package com.vaadin.bugrap.events
+package org.vaadin.bugrap.events
 
 /**
  *

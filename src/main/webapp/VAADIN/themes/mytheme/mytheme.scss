@@ -61,27 +61,32 @@
   }
 
   .label-dark {
-    background: #6d6d6d;
+    background: #444444;
     color: #ffffff;
     text-align: center;
   }
 
   .label-gray {
-    background: #6d6d6d;
+    background: #7f7f7f;
     color: #ffffff;
     text-align: center;
   }
 
   .label-light {
-    background: #6d6d6d;
-    color: #ffffff;
+    background: #b9b9b9;
+    color: #393939;
     text-align: center;
+  }
+
+  .label-progress {
+    min-width: 30px;
   }
 
   .v-select-select {
     -webkit-appearance: none;
+    appearance: none;
     //height: 28px;
-    //font-size: 12px;
+    font-size: 12px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     border-bottom-left-radius: 15px;

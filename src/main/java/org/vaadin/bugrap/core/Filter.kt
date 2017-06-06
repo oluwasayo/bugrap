@@ -1,4 +1,4 @@
-package com.vaadin.bugrap.core
+package org.vaadin.bugrap.core
 
 import org.vaadin.bugrap.domain.entities.Report.Status
 import java.io.Serializable

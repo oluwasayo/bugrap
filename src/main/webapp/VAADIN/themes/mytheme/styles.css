@@ -981,7 +981,7 @@
  */
 
 .v-vaadin-version:after {
-	content: "8.0.5";
+	content: "8.0.6";
 }
 
 .v-widget {
@@ -12708,25 +12708,31 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .label-dark {
-	background: #6d6d6d;
+	background: #444444;
 	color: #ffffff;
 	text-align: center;
 }
 
 .mytheme .label-gray {
-	background: #6d6d6d;
+	background: #7f7f7f;
 	color: #ffffff;
 	text-align: center;
 }
 
 .mytheme .label-light {
-	background: #6d6d6d;
-	color: #ffffff;
+	background: #b9b9b9;
+	color: #393939;
 	text-align: center;
+}
+
+.mytheme .label-progress {
+	min-width: 30px;
 }
 
 .mytheme .v-select-select {
 	-webkit-appearance: none;
+	appearance: none;
+	font-size: 12px;
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
 	border-bottom-left-radius: 15px;

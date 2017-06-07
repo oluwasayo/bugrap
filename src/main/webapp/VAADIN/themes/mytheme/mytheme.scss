@@ -37,23 +37,23 @@
   // Insert your own theme rules here
 
   .rounded-east {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
   }
 
   .rounded-west {
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px !important;
+    border-bottom-left-radius: 15px !important;
   }
 
   .rounded-north {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-top-left-radius: 15px !important;
+    border-top-right-radius: 15px !important;
   }
 
   .rounded-south {
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;
   }
 
   .menubar-tiny {
@@ -91,5 +91,9 @@
     border-top-right-radius: 15px;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
+  }
+
+  .v-menubar-color1 {
+    @include valo-menubar-style($background-color: $v-selection-color, $unit-size: null);
   }
 }

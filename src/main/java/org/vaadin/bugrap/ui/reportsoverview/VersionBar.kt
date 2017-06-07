@@ -12,6 +12,7 @@ import com.vaadin.ui.NativeSelect
 import com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP
 import org.vaadin.bugrap.core.ALL_VERSIONS
 import org.vaadin.bugrap.core.ApplicationModel
+import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
 import org.vaadin.bugrap.core.LABEL_DARK
 import org.vaadin.bugrap.core.LABEL_GRAY
 import org.vaadin.bugrap.core.LABEL_LIGHT
@@ -33,7 +34,7 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class VersionBar: CustomComponent() {
+class VersionBar : CustomComponent() {
 
   @Inject
   private lateinit var applicationModel: ApplicationModel
@@ -59,8 +60,8 @@ class VersionBar: CustomComponent() {
       addStyleName(ROUNDED_EAST)
       addStyleName(ROUNDED_WEST)
 
-      addSelectionListener { e ->
-        versionChangeEvent.fire(VersionChangeEvent(e.selectedItem.orElse(null)))
+      addSelectionListener {
+        versionChangeEvent.fire(VersionChangeEvent(it.selectedItem.orElse(null)))
         updateProgressBars()
       }
     }
@@ -110,25 +111,25 @@ class VersionBar: CustomComponent() {
   }
 
   fun updateVersionComponents(@Observes event: ProjectChangeEvent) {
-    val versions = ApplicationModel.bugrapRepository.findProjectVersions(event.project).sortedBy { it.releaseDate }
+    val versions = bugrapRepository.findProjectVersions(event.project).sortedBy { it.releaseDate }
     versionSelector.setItems(versions)
     versionSelector.setSelectedItem(null)
     updateProgressBars()
   }
 
   fun updateProgressBars() {
-    var closed = 0L
-    var open = 0L
-    var unassigned = 0L
+    val closed: Long
+    val open: Long
+    val unassigned: Long
 
     if (applicationModel.getSelectedVersion() == null) {
-      closed = ApplicationModel.bugrapRepository.countClosedReports(applicationModel.getSelectedProject())
-      open = ApplicationModel.bugrapRepository.countOpenedReports(applicationModel.getSelectedProject())
-      unassigned = ApplicationModel.bugrapRepository.countUnassignedReports(applicationModel.getSelectedProject())
+      closed = bugrapRepository.countClosedReports(applicationModel.getSelectedProject())
+      open = bugrapRepository.countOpenedReports(applicationModel.getSelectedProject())
+      unassigned = bugrapRepository.countUnassignedReports(applicationModel.getSelectedProject())
     } else {
-      closed = ApplicationModel.bugrapRepository.countClosedReports(applicationModel.getSelectedVersion())
-      open = ApplicationModel.bugrapRepository.countOpenedReports(applicationModel.getSelectedVersion())
-      unassigned = ApplicationModel.bugrapRepository.countUnassignedReports(applicationModel.getSelectedVersion())
+      closed = bugrapRepository.countClosedReports(applicationModel.getSelectedVersion())
+      open = bugrapRepository.countOpenedReports(applicationModel.getSelectedVersion())
+      unassigned = bugrapRepository.countUnassignedReports(applicationModel.getSelectedVersion())
     }
 
     val total = closed + open + unassigned

@@ -99,20 +99,21 @@ class FilterBar : CustomComponent() {
         menuItem.isCheckable = true
         menuItem.command = MenuBar.Command {
           filter.statuses.clear()
-          rootItem.children.filter { it.isChecked }.forEach { e ->
-            filter.statuses.add(statusMap.get(e.text)!!)
+
+          rootItem.children.filter { it.isChecked }.forEach {
+            filter.statuses.add(statusMap.get(it.text)!!)
           }
 
           if (filter.statuses.isEmpty()) {
             allKindsButton.addStyleName(BUTTON_PRIMARY)
             this@apply.removeStyleName(MENUBAR_THEMED)
           } else {
-            openButton.removeStyleName(BUTTON_PRIMARY)
+            allKindsButton.removeStyleName(BUTTON_PRIMARY)
             this@apply.addStyleName(MENUBAR_THEMED)
             this@apply.addStyleName(ROUNDED_EAST)
           }
 
-          allKindsButton.removeStyleName(BUTTON_PRIMARY)
+          openButton.removeStyleName(BUTTON_PRIMARY)
           filterChangeEvent.fire(filterChange)
         }
       }

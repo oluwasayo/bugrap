@@ -22,6 +22,7 @@ import com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP
 import com.vaadin.ui.themes.ValoTheme.TEXTFIELD_INLINE_ICON
 import com.vaadin.ui.themes.ValoTheme.TEXTFIELD_TINY
 import org.vaadin.bugrap.core.ApplicationModel
+import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
 import org.vaadin.bugrap.core.LABEL_DARK
 import org.vaadin.bugrap.core.MANAGE_PROJECT
 import org.vaadin.bugrap.core.REPORT_A_BUG
@@ -79,13 +80,13 @@ class ActionsBar : CustomComponent() {
       setWidth(88.2f, PERCENTAGE)
 
       valueChangeMode = LAZY
-      addValueChangeListener { e -> searchEvent.fire(SearchEvent(e.value)) }
+      addValueChangeListener { searchEvent.fire(SearchEvent(it.value)) }
     }
 
     val clearSearchButton = Button(CLOSE_SMALL).apply {
       addStyleName(BUTTON_TINY)
       addStyleName(ROUNDED_EAST)
-      addClickListener { e -> searchField.clear() }
+      addClickListener { searchField.clear() }
     }
 
     val searchBar = CssLayout().apply {
@@ -118,10 +119,10 @@ class ActionsBar : CustomComponent() {
 
   private fun countReports(): String {
     if (applicationModel.getSelectedVersion() != null) {
-      return ApplicationModel.bugrapRepository.countReports(applicationModel.getSelectedVersion()).toString()
+      return bugrapRepository.countReports(applicationModel.getSelectedVersion()).toString()
     }
 
-    return ApplicationModel.bugrapRepository.countReports(applicationModel.getSelectedProject()).toString()
+    return bugrapRepository.countReports(applicationModel.getSelectedProject()).toString()
   }
 
   fun updateReportCount(@Observes event: ProjectChangeEvent) {

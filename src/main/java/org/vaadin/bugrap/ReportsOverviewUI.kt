@@ -59,7 +59,7 @@ class ReportsOverviewUI : UI() {
     table.apply {
       setSizeFull()
       setSelectionMode(MULTI)
-      addSelectionListener { e -> reportSelectionEvent.fire(ReportSelectionEvent(e.allSelectedItems)) }
+      addSelectionListener { reportSelectionEvent.fire(ReportSelectionEvent(it.allSelectedItems)) }
       updateGrid(ReportsRefreshEvent())
     }
 
@@ -72,6 +72,7 @@ class ReportsOverviewUI : UI() {
           filterBar,
           table
       )
+
       setExpandRatio(table, 1f)
     }
 
@@ -85,7 +86,11 @@ class ReportsOverviewUI : UI() {
     if (applicationModel.getSelectedVersion() == null) {
       if (table.getColumn(VERSION) == null) table.addColumn(VERSION)
       table.setColumnOrder(VERSION, PRIORITY)
-      table.setSortOrder(asc(table.getColumn(VERSION)).thenDesc(table.getColumn(PRIORITY)).build())
+      table.setSortOrder(
+          asc(table.getColumn(VERSION))
+          .thenDesc(table.getColumn(PRIORITY))
+          .build()
+      )
     } else {
       if (table.getColumn(VERSION) != null) table.removeColumn(VERSION)
       table.setColumnOrder(PRIORITY)

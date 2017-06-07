@@ -13,6 +13,7 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Label
 import com.vaadin.ui.NativeSelect
 import com.vaadin.ui.themes.ValoTheme
+import com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.LOGOUT
 import org.vaadin.bugrap.core.ROUNDED_EAST
@@ -30,7 +31,7 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ProjectSelectorBar: CustomComponent() {
+class ProjectSelectorBar : CustomComponent() {
 
   @Inject
   private lateinit var applicationModel: ApplicationModel
@@ -52,7 +53,7 @@ class ProjectSelectorBar: CustomComponent() {
       addStyleName(ROUNDED_WEST)
       setHeight(28f, PIXELS)
 
-      addSelectionListener{ e -> projectChangeEvent.fire(ProjectChangeEvent(e.selectedItem.get())) }
+      addSelectionListener{ projectChangeEvent.fire(ProjectChangeEvent(it.selectedItem.get())) }
     }
 
     val userLabel = Label("${USER.html} ${applicationModel.getUsername()}").apply { contentMode = HTML }
@@ -66,12 +67,12 @@ class ProjectSelectorBar: CustomComponent() {
       addStyleName(ROUNDED_EAST)
       addStyleName(ROUNDED_WEST)
 
-      addClickListener { e -> logoutEvent.fire(LogoutEvent()) }
+      addClickListener { logoutEvent.fire(LogoutEvent()) }
     }
 
     val profileSection = HorizontalLayout().apply {
       addComponents(userLabel, separator, logoutLabel)
-      styleName = ValoTheme.LAYOUT_COMPONENT_GROUP
+      styleName = LAYOUT_COMPONENT_GROUP
     }
 
     compositionRoot = HorizontalLayout().apply {

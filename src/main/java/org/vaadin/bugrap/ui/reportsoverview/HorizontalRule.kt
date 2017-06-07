@@ -10,7 +10,7 @@ import com.vaadin.ui.Label
  *
  * @author oladeji
  */
-class HorizontalRule: HorizontalLayout() {
+class HorizontalRule : HorizontalLayout() {
 
   init {
     val horizontalRuleLabel = Label("<hr />").apply {

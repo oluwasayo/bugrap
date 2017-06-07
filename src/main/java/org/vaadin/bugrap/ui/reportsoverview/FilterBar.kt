@@ -34,7 +34,7 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class FilterBar: CustomComponent() {
+class FilterBar : CustomComponent() {
 
   @Inject
   private lateinit var filter: Filter
@@ -93,17 +93,36 @@ class FilterBar: CustomComponent() {
     }
 
     val customMenu = MenuBar().apply {
-      addItem(CUSTOM, null).apply {
-        Status.values().forEach { addItem(it.toString(), null) }
+      val rootItem = addItem(CUSTOM, null)
+      Status.values().forEach {
+        val menuItem = rootItem.addItem(it.toString(), null)
+        menuItem.isCheckable = true
+        menuItem.command = MenuBar.Command {
+          filter.statuses.clear()
+          rootItem.children.filter { it.isChecked }.forEach { e ->
+            filter.statuses.add(statusMap.get(e.text)!!)
+          }
+
+          if (filter.statuses.isEmpty()) {
+            allKindsButton.addStyleName(BUTTON_PRIMARY)
+            this@apply.removeStyleName(MENUBAR_THEMED)
+          } else {
+            openButton.removeStyleName(BUTTON_PRIMARY)
+            this@apply.addStyleName(MENUBAR_THEMED)
+            this@apply.addStyleName(ROUNDED_EAST)
+          }
+
+          allKindsButton.removeStyleName(BUTTON_PRIMARY)
+          filterChangeEvent.fire(filterChange)
+        }
       }
 
       addStyleName(MENUBAR_SMALL)
       addStyleName(ROUNDED_EAST)
-      addStyleName(MENUBAR_THEMED)
     }
 
     openButton.apply {
-      addClickListener{ e ->
+      addClickListener {
         addStyleName(BUTTON_PRIMARY)
         allKindsButton.removeStyleName(BUTTON_PRIMARY)
         customMenu.removeStyleName(MENUBAR_THEMED)
@@ -133,5 +152,13 @@ class FilterBar: CustomComponent() {
     }
 
     setSizeUndefined()
+  }
+
+  companion object {
+    private val statusMap = hashMapOf<String, Status>()
+
+    init {
+      Status.values().forEach { statusMap.put(it.toString(), it) }
+    }
   }
 }

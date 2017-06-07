@@ -105,12 +105,13 @@ class FilterBar : CustomComponent() {
           }
 
           if (filter.statuses.isEmpty()) {
-            allKindsButton.addStyleName(BUTTON_PRIMARY)
             this@apply.removeStyleName(MENUBAR_THEMED)
+            allKindsButton.addStyleName(BUTTON_PRIMARY)
+            allKindsButton.focus()
           } else {
-            allKindsButton.removeStyleName(BUTTON_PRIMARY)
-            this@apply.addStyleName(MENUBAR_THEMED)
             this@apply.addStyleName(ROUNDED_EAST)
+            this@apply.addStyleName(MENUBAR_THEMED)
+            allKindsButton.removeStyleName(BUTTON_PRIMARY)
           }
 
           openButton.removeStyleName(BUTTON_PRIMARY)

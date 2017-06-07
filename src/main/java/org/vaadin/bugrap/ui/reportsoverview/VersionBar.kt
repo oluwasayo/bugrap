@@ -3,7 +3,6 @@ package org.vaadin.bugrap.ui.reportsoverview
 import com.vaadin.server.Sizeable.Unit.MM
 import com.vaadin.server.Sizeable.Unit.PERCENTAGE
 import com.vaadin.server.Sizeable.Unit.PIXELS
-import com.vaadin.shared.ui.ContentMode.HTML
 import com.vaadin.ui.CssLayout
 import com.vaadin.ui.CustomComponent
 import com.vaadin.ui.HorizontalLayout
@@ -67,20 +66,17 @@ class VersionBar : CustomComponent() {
     }
 
     darkProgress.apply {
-      contentMode = HTML
       addStyleName(LABEL_DARK)
       addStyleName(LABEL_PROGRESS)
       addStyleName(ROUNDED_WEST)
     }
 
     middleProgress.apply {
-      contentMode = HTML
       addStyleName(LABEL_GRAY)
       addStyleName(LABEL_PROGRESS)
     }
 
     lightProgress.apply {
-      contentMode = HTML
       addStyleName(LABEL_LIGHT)
       addStyleName(LABEL_PROGRESS)
       addStyleName(ROUNDED_EAST)

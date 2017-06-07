@@ -16,6 +16,7 @@
   <properties>
     <vaadin.version>8.0.6</vaadin.version>
     <vaadin.plugin.version>8.0.6</vaadin.plugin.version>
+    <vaadin.testbench.version>5.0.0</vaadin.testbench.version>
     <jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -85,6 +86,12 @@
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-themes</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-testbench</artifactId>
+      <version>${vaadin.testbench.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.vaadin</groupId>

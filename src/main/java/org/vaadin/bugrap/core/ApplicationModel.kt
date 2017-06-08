@@ -11,6 +11,7 @@ import org.vaadin.bugrap.events.FilterChangeEvent
 import org.vaadin.bugrap.events.LogoutEvent
 import org.vaadin.bugrap.events.ProjectChangeEvent
 import org.vaadin.bugrap.events.ReportsRefreshEvent
+import org.vaadin.bugrap.events.ReportsSelectionEvent
 import org.vaadin.bugrap.events.SearchEvent
 import org.vaadin.bugrap.events.VersionChangeEvent
 import java.io.File
@@ -51,6 +52,9 @@ class ApplicationModel : Serializable {
 
   private lateinit var reports: Set<Report>
   fun getReports() = reports
+
+  private var selectedReports = hashSetOf<Report>()
+  fun getSelectedReports() = selectedReports
 
   private var user: Reporter? = null
   fun getUsername() = user
@@ -104,6 +108,13 @@ class ApplicationModel : Serializable {
 
   fun applyFilter(@Observes event: FilterChangeEvent) {
     refreshReports()
+  }
+
+  fun updateSelectedReports(@Observes event: ReportsSelectionEvent) {
+    selectedReports.apply {
+      clear()
+      addAll(event.selectedReports)
+    }
   }
 
   companion object {

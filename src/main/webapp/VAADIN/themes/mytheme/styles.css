@@ -12729,9 +12729,25 @@ div.v-layout.v-horizontal.v-widget {
 	min-width: 30px;
 }
 
+.mytheme .label-gray-text {
+	color: #919191;
+}
+
+.mytheme .align-bottom {
+	-webkit-box-align: end;
+	-webkit-align-items: flex-end;
+	-ms-flex-align: end;
+	align-items: flex-end;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+
 .mytheme .v-select-select {
 	-webkit-appearance: none;
 	appearance: none;
+	min-width: 60px;
 	font-size: 12px;
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;

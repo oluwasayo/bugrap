@@ -14,12 +14,13 @@ import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.PRIORITY
 import org.vaadin.bugrap.core.VERSION
 import org.vaadin.bugrap.domain.entities.Report
-import org.vaadin.bugrap.events.ReportSelectionEvent
 import org.vaadin.bugrap.events.ReportsRefreshEvent
+import org.vaadin.bugrap.events.ReportsSelectionEvent
 import org.vaadin.bugrap.ui.reportsoverview.ActionsBar
 import org.vaadin.bugrap.ui.reportsoverview.FilterBar
 import org.vaadin.bugrap.ui.reportsoverview.HorizontalRule
 import org.vaadin.bugrap.ui.reportsoverview.ProjectSelectorBar
+import org.vaadin.bugrap.ui.reportsoverview.PropertiesBar
 import org.vaadin.bugrap.ui.reportsoverview.VersionBar
 import javax.enterprise.event.Event
 import javax.enterprise.event.Observes
@@ -49,7 +50,10 @@ class ReportsOverviewUI : UI() {
   private lateinit var filterBar: FilterBar
 
   @Inject
-  private lateinit var reportSelectionEvent: Event<ReportSelectionEvent>
+  private lateinit var propertiesBar: PropertiesBar
+
+  @Inject
+  private lateinit var reportSelectionEvent: Event<ReportsSelectionEvent>
 
   private var table = Grid<Report>(Report::class.java)
 
@@ -59,7 +63,7 @@ class ReportsOverviewUI : UI() {
     table.apply {
       setSizeFull()
       setSelectionMode(MULTI)
-      addSelectionListener { reportSelectionEvent.fire(ReportSelectionEvent(it.allSelectedItems)) }
+      addSelectionListener { reportSelectionEvent.fire(ReportsSelectionEvent(it.allSelectedItems)) }
       updateGrid(ReportsRefreshEvent())
     }
 
@@ -70,7 +74,8 @@ class ReportsOverviewUI : UI() {
           HorizontalRule(),
           versionBar.apply { setWidth(100f, PERCENTAGE) },
           filterBar,
-          table
+          table,
+          propertiesBar
       )
 
       setExpandRatio(table, 1f)

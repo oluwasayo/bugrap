@@ -6,4 +6,4 @@ import org.vaadin.bugrap.domain.entities.Report
  *
  * @author oladeji
  */
-class ReportSelectionEvent(val selectedReports: Set<Report>)
+class ReportsSelectionEvent(val selectedReports: Set<Report>)

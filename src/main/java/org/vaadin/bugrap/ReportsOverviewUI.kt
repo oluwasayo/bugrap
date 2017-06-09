@@ -3,6 +3,7 @@ package org.vaadin.bugrap
 import com.vaadin.annotations.Theme
 import com.vaadin.cdi.CDIUI
 import com.vaadin.data.provider.GridSortOrder.asc
+import com.vaadin.server.ExternalResource
 import com.vaadin.server.Sizeable.Unit.PERCENTAGE
 import com.vaadin.server.VaadinRequest
 import com.vaadin.shared.data.sort.SortDirection.DESCENDING
@@ -11,6 +12,8 @@ import com.vaadin.ui.Grid.SelectionMode.MULTI
 import com.vaadin.ui.UI
 import com.vaadin.ui.VerticalLayout
 import org.vaadin.bugrap.core.ApplicationModel
+import org.vaadin.bugrap.core.CONTEXT_ROOT
+import org.vaadin.bugrap.core.NEW_WINDOW
 import org.vaadin.bugrap.core.PRIORITY
 import org.vaadin.bugrap.core.VERSION
 import org.vaadin.bugrap.domain.entities.Report
@@ -55,6 +58,8 @@ class ReportsOverviewUI : UI() {
   @Inject
   private lateinit var reportSelectionEvent: Event<ReportsSelectionEvent>
 
+  private val reportsRefresh = ReportsRefreshEvent()
+
   private var table = Grid<Report>(Report::class.java)
 
   override fun init(vaadinRequest: VaadinRequest) {
@@ -63,8 +68,26 @@ class ReportsOverviewUI : UI() {
     table.apply {
       setSizeFull()
       setSelectionMode(MULTI)
+
       addSelectionListener { reportSelectionEvent.fire(ReportsSelectionEvent(it.allSelectedItems)) }
-      updateGrid(ReportsRefreshEvent())
+
+      addItemClickListener {
+        if (it.mouseEventDetails.isDoubleClick) {
+          page.open(ExternalResource(CONTEXT_ROOT + it.item.id.toString()), NEW_WINDOW, false)
+        }
+      }
+
+//      addL
+//
+//      addShortcutListener(ShortcutListenerFactory.create("Enter", KeyCode.ENTER, intArrayOf()) { sender, target ->
+//        if (target is Grid<*>) {
+//          (target as Grid<Report>).getFocusedCell
+//        }
+//        println("Sender: $sender\nTarget: $target")
+//        //page.open(ExternalResource(CONTEXT_ROOT + it.item.id.toString()), NEW_WINDOW, false)
+//      })
+
+      updateGrid(reportsRefresh)
     }
 
     content = verticalLayout.apply {
@@ -81,6 +104,7 @@ class ReportsOverviewUI : UI() {
       setExpandRatio(table, 1f)
     }
 
+    page.setTitle("Bugrap")
     content.setSizeFull()
   }
 

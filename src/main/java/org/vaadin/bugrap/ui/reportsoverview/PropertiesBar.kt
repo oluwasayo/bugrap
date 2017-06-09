@@ -4,6 +4,7 @@ import com.vaadin.icons.VaadinIcons.EXTERNAL_LINK
 import com.vaadin.server.ExternalResource
 import com.vaadin.server.Sizeable.Unit.MM
 import com.vaadin.server.Sizeable.Unit.PERCENTAGE
+import com.vaadin.server.Sizeable.Unit.PIXELS
 import com.vaadin.ui.Button
 import com.vaadin.ui.CustomComponent
 import com.vaadin.ui.HorizontalLayout
@@ -19,6 +20,7 @@ import org.vaadin.bugrap.core.ALIGN_BOTTOM
 import org.vaadin.bugrap.core.ASSIGNED_TO
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
+import org.vaadin.bugrap.core.CONTEXT_ROOT
 import org.vaadin.bugrap.core.ICON_AFTER_CAPTION
 import org.vaadin.bugrap.core.ISSUE_TYPE
 import org.vaadin.bugrap.core.LABEL_GRAY_TEXT
@@ -68,7 +70,6 @@ class PropertiesBar : CustomComponent() {
 
   @PostConstruct
   fun setup() {
-
     newWindowLink.apply {
       setIcon(EXTERNAL_LINK)
       setTargetName(NEW_WINDOW)
@@ -80,6 +81,12 @@ class PropertiesBar : CustomComponent() {
     val summaryBar = HorizontalLayout().apply {
       addComponents(newWindowLink, reportDetailLabel, fixedTextLabel)
     }
+
+    priorityControl.setWidth(100F, PIXELS)
+    typeControl.setWidth(100f, PIXELS)
+    statusControl.setWidth(120f, PIXELS)
+    assigneeControl.setWidth(120f, PIXELS)
+    versionControl.setWidth(100f, PIXELS)
 
     assigneeControl.setItems(bugrapRepository.findReporters())
     versionControl.setItems(bugrapRepository.findProjectVersions(applicationModel.getSelectedProject()))
@@ -151,7 +158,7 @@ class PropertiesBar : CustomComponent() {
 
     if (!event.selectedReports.isEmpty()) {
       newWindowLink.caption = event.selectedReports.first().summary
-      newWindowLink.resource = ExternalResource("http://localhost:8080/${event.selectedReports.first().id.toString()}")
+      newWindowLink.resource = ExternalResource(CONTEXT_ROOT + event.selectedReports.first().id.toString())
 
       event.selectedReports.map { it.priority }.distinct().apply {
         priorityControl.setSelectedItem(if (count() == 1) first() else null)

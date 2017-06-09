@@ -48,3 +48,5 @@ const val ALIGN_BOTTOM = "align-bottom"
 
 const val NEW_WINDOW = "_blank"
 const val ICON_AFTER_CAPTION = "icon-after-caption"
+
+const val CONTEXT_ROOT = "http://localhost:8080/"

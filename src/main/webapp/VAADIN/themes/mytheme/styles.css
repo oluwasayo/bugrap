@@ -12745,14 +12745,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-select-select {
-	-webkit-appearance: none;
-	appearance: none;
 	min-width: 60px;
-	font-size: 12px;
-	border-top-left-radius: 15px;
-	border-top-right-radius: 15px;
-	border-bottom-left-radius: 15px;
-	border-bottom-right-radius: 15px;
 }
 
 .mytheme .v-menubar-color1 {

@@ -6,12 +6,14 @@ import com.vaadin.server.ServiceException;
 import com.vaadin.server.VaadinServletService;
 
 public class MVaadinCDIServlet extends VaadinCDIServlet {
-    @Override
-    protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration) throws ServiceException {
-        VaadinServletService service = new MVaadinCDIServletService(this,
-                deploymentConfiguration);
-        service.init();
-        return service;
 
-    }
+  @Override
+  protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration)
+      throws ServiceException {
+
+    VaadinServletService service = new MVaadinCDIServletService(this,
+        deploymentConfiguration);
+    service.init();
+    return service;
+  }
 }

@@ -25,6 +25,7 @@ public class MVaadinCDIServletService extends VaadinServletService {
   private BeanManager beanManager = null;
 
   protected final class SessionListenerImpl implements SessionInitListener, SessionDestroyListener {
+
     @Override
     public void sessionInit(SessionInitEvent event) {
       getLogger().fine("Session init");
@@ -43,6 +44,7 @@ public class MVaadinCDIServletService extends VaadinServletService {
 
   public MVaadinCDIServletService(VaadinServlet servlet, DeploymentConfiguration deploymentConfiguration)
       throws ServiceException {
+
     super(servlet, deploymentConfiguration);
 
     SessionListenerImpl sessionListener = new SessionListenerImpl();
@@ -54,20 +56,20 @@ public class MVaadinCDIServletService extends VaadinServletService {
     if (beanManager == null) {
       beanManager = CDIUtil.lookupBeanManager();
     }
+
     if (beanManager == null) {
       beanManager = CDI.current().getBeanManager();
     }
+
     return beanManager;
   }
 
   private static Logger getLogger() {
-    return Logger.getLogger(VaadinCDIServletService.class
-        .getCanonicalName());
+    return Logger.getLogger(VaadinCDIServletService.class.getCanonicalName());
   }
 
   @Override
-  public void handleRequest(VaadinRequest request, VaadinResponse response)
-      throws ServiceException {
+  public void handleRequest(VaadinRequest request, VaadinResponse response) throws ServiceException {
     super.handleRequest(request, response);
     VaadinViewChangeCleanupEvent event = CDIViewProvider.getCleanupEvent();
     if (event != null) {
@@ -75,6 +77,5 @@ public class MVaadinCDIServletService extends VaadinServletService {
       getBeanManager().fireEvent(event);
       CDIViewProvider.removeCleanupEvent();
     }
-
   }
 }

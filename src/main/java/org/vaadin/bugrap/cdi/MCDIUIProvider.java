@@ -6,17 +6,19 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
 
 public class MCDIUIProvider extends CDIUIProvider {
-    BeanManager beanManager = null;
 
-    @Override
-    public BeanManager getBeanManager() {
+  BeanManager beanManager = null;
 
-        if (beanManager == null) {
-            beanManager = CDI.current().getBeanManager();
-        }
-        if (beanManager == null) {
-            beanManager = super.getBeanManager();
-        }
-        return beanManager;
+  @Override
+  public BeanManager getBeanManager() {
+    if (beanManager == null) {
+      beanManager = CDI.current().getBeanManager();
     }
+
+    if (beanManager == null) {
+      beanManager = super.getBeanManager();
+    }
+
+    return beanManager;
+  }
 }

@@ -3,6 +3,7 @@ package org.vaadin.bugrap
 import com.vaadin.annotations.Theme
 import com.vaadin.cdi.CDIUI
 import com.vaadin.data.provider.GridSortOrder.asc
+import com.vaadin.event.ShortcutAction.KeyCode
 import com.vaadin.server.ExternalResource
 import com.vaadin.server.Sizeable.Unit.PERCENTAGE
 import com.vaadin.server.VaadinRequest
@@ -15,6 +16,7 @@ import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.CONTEXT_ROOT
 import org.vaadin.bugrap.core.NEW_WINDOW
 import org.vaadin.bugrap.core.PRIORITY
+import org.vaadin.bugrap.core.ShortcutListenerFactory.newShortcutListener
 import org.vaadin.bugrap.core.VERSION
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.events.ReportsRefreshEvent
@@ -77,15 +79,12 @@ class ReportsOverviewUI : UI() {
         }
       }
 
-//      addL
-//
-//      addShortcutListener(ShortcutListenerFactory.create("Enter", KeyCode.ENTER, intArrayOf()) { sender, target ->
-//        if (target is Grid<*>) {
-//          (target as Grid<Report>).getFocusedCell
-//        }
-//        println("Sender: $sender\nTarget: $target")
-//        //page.open(ExternalResource(CONTEXT_ROOT + it.item.id.toString()), NEW_WINDOW, false)
-//      })
+      addShortcutListener(newShortcutListener("Enter", KeyCode.ENTER, intArrayOf()) { sender, target ->
+        if (target is Grid<*> && target.selectedItems.size >= 1) {
+          page.open(ExternalResource(CONTEXT_ROOT + (target as Grid<Report>).selectedItems.last().id.toString()),
+              NEW_WINDOW, false)
+        }
+      })
 
       updateGrid(reportsRefresh)
     }

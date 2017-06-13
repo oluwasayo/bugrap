@@ -32,17 +32,15 @@ class ReportDescriptionBar : CustomComponent() {
   @Inject
   private lateinit var applicationModel: ApplicationModel
 
-  var infoLabel = Label().apply {
-    addStyleName(LABEL_GRAY_TEXT)
-  }
-
-  var descriptionArea = TextArea().apply {
-    addStyleName(WIDE_TEXTAREA)
-    setWidth(100f, PERCENTAGE)
-  }
+  var infoLabel = Label()
+  var descriptionArea = TextArea()
 
   @PostConstruct
   fun setup() {
+    infoLabel.addStyleName(LABEL_GRAY_TEXT)
+    descriptionArea.addStyleName(WIDE_TEXTAREA)
+    descriptionArea.setWidth(100f, PERCENTAGE)
+
     var topBar = HorizontalLayout().apply {
       val space = Label()
 
@@ -78,7 +76,7 @@ class ReportDescriptionBar : CustomComponent() {
     if (isVisible) {
       val report = event.selectedReports.first()
       val name = report.author?.name ?: "Unknown Reporter"
-      infoLabel.caption = "$name (${userFriendlyTimeDiff(report.reportedTimestamp)})"
+      infoLabel.value = "$name (${userFriendlyTimeDiff(report.reportedTimestamp)})"
       descriptionArea.value = report.description
     }
   }

@@ -81,6 +81,7 @@ class ApplicationModel : Serializable {
     }
 
     reports = bugrapRepository.findReports(query)
+    selectedReports.clear()
     if (fireEvent) reportsRefreshEvent.fire(ReportsRefreshEvent())
   }
 

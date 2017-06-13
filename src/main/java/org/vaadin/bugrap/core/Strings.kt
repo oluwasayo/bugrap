@@ -4,6 +4,8 @@ package org.vaadin.bugrap.core
  *
  * @author oladeji
  */
+const val ID = "id"
+const val DESCRIPTION = "description"
 const val VERSION = "version"
 const val PRIORITY = "priority"
 
@@ -17,6 +19,13 @@ const val LABEL_GRAY = "label-gray"
 const val LABEL_LIGHT = "label-light"
 const val LABEL_PROGRESS = "label-progress"
 const val LABEL_GRAY_TEXT = "label-gray-text"
+
+const val WHITE_BACKGROUND = "white-background"
+const val GRAY_BACKGROUND = "gray-background"
+const val WIDE_TEXTAREA = "wide-textarea"
+const val SMALL_TOP_MARGIN = "small-top-margin"
+const val SMALL_PADDING = "small-padding"
+const val TOP_BORDER = "top-border"
 
 const val REPORT_FOR = "Report for"
 const val SEARCH_REPORTS = "Search reports..."

@@ -79,6 +79,7 @@ class PropertiesBar : CustomComponent() {
     fixedTextLabel.addStyleName(LABEL_GRAY_TEXT)
 
     val summaryBar = HorizontalLayout().apply {
+      setHeight(20f, PIXELS)
       addComponents(newWindowLink, reportDetailLabel, fixedTextLabel)
     }
 
@@ -136,15 +137,14 @@ class PropertiesBar : CustomComponent() {
     }
 
     compositionRoot = VerticalLayout().apply {
-      setMargin(false)
       addComponents(summaryBar, controlsBar)
+      setMargin(false)
       setWidth(100f, PERCENTAGE)
     }
 
     setSizeUndefined()
     isVisible = false
   }
-
 
   fun updateProperties(@Observes event: ReportsSelectionEvent) {
     isVisible = !event.selectedReports.isEmpty()

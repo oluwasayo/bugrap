@@ -8,7 +8,6 @@ import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.domain.entities.Reporter
 import org.vaadin.bugrap.events.FilterChangeEvent
-import org.vaadin.bugrap.events.LogoutEvent
 import org.vaadin.bugrap.events.ProjectChangeEvent
 import org.vaadin.bugrap.events.ReportsRefreshEvent
 import org.vaadin.bugrap.events.ReportsSelectionEvent
@@ -89,10 +88,6 @@ class ApplicationModel : Serializable {
     val statuses = if (filter.statuses.isEmpty()) null else filter.statuses
     reports = HashSet(searchFacade.search(event.searchTerm, selectedProject, selectedVersion, statuses))
     reportsRefreshEvent.fire(ReportsRefreshEvent())
-  }
-
-  fun logout(@Observes event: LogoutEvent) {
-    this.user = null
   }
 
   fun switchProject(@Observes event: ProjectChangeEvent) {

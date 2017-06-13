@@ -12733,6 +12733,10 @@ div.v-layout.v-horizontal.v-widget {
 	color: #919191;
 }
 
+.mytheme .gray-background {
+	background: #acacac;
+}
+
 .mytheme .align-bottom {
 	-webkit-box-align: end;
 	-webkit-align-items: flex-end;
@@ -12742,6 +12746,37 @@ div.v-layout.v-horizontal.v-widget {
 	display: -webkit-flex;
 	display: -ms-flexbox;
 	display: flex;
+}
+
+.mytheme .wide-textarea {
+	border-color: #ffffff;
+	padding: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+.mytheme .small-top-margin {
+	margin-top: 15px;
+}
+
+.mytheme .small-padding {
+	padding: 10px;
+}
+
+.mytheme .top-border {
+	border-top-color: #b9b9b9;
+}
+
+.mytheme .large-spacing .v-vertical > .v-spacing {
+	height: 30px;
+}
+
+.mytheme .hr {
+	color: #cccccc;
+	-webkit-margin-before: 0.5em;
+	-webkit-margin-after: 0.5em;
 }
 
 .mytheme .v-select-select {

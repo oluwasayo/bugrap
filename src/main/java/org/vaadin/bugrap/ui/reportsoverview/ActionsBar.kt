@@ -3,8 +3,8 @@ package org.vaadin.bugrap.ui.reportsoverview
 import com.vaadin.icons.VaadinIcons.BUG
 import com.vaadin.icons.VaadinIcons.CLOSE_SMALL
 import com.vaadin.icons.VaadinIcons.COG
+import com.vaadin.icons.VaadinIcons.LIGHTBULB
 import com.vaadin.icons.VaadinIcons.LINE_V
-import com.vaadin.icons.VaadinIcons.PLUS
 import com.vaadin.icons.VaadinIcons.SEARCH
 import com.vaadin.server.Sizeable.Unit.MM
 import com.vaadin.server.Sizeable.Unit.PERCENTAGE
@@ -56,11 +56,11 @@ class ActionsBar : CustomComponent() {
 
   @PostConstruct
   fun setup() {
-    val reportBugLabel = Label("${BUG.html} ${REPORT_A_BUG}").apply { contentMode = HTML }
-    val bugSeparatorLabel1 = Label(LINE_V.html).apply { contentMode = HTML }
-    val featureLabel = Label("${PLUS.html} ${REQUEST_A_FEATURE}").apply { contentMode = HTML }
-    val bugSeparatorLabel2 = Label(LINE_V.html).apply { contentMode = HTML }
-    val manageProjectLabel = Label("${COG.html} ${MANAGE_PROJECT}").apply { contentMode = HTML }
+    val reportBugLabel = Label("${BUG.html} ${REPORT_A_BUG}", HTML)
+    val bugSeparatorLabel1 = Label(LINE_V.html, HTML)
+    val featureLabel = Label("${LIGHTBULB.html} ${REQUEST_A_FEATURE}", HTML)
+    val bugSeparatorLabel2 = Label(LINE_V.html, HTML)
+    val manageProjectLabel = Label("${COG.html} ${MANAGE_PROJECT}", HTML)
 
     projectCountLabel.apply {
       addStyleName(ROUNDED_EAST)

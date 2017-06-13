@@ -86,6 +86,10 @@
     color: #919191;
   }
 
+  .gray-background {
+    background: #acacac;
+  }
+
   .align-bottom {
     -webkit-box-align: end;
     -webkit-align-items: flex-end;
@@ -95,6 +99,37 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+  }
+
+  .wide-textarea {
+    border-color: #ffffff;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;         /* For IE and modern versions of Chrome */
+    -moz-box-sizing: border-box;    /* For Firefox                          */
+    -webkit-box-sizing: border-box;
+  }
+
+  .small-top-margin {
+    margin-top: 15px;
+  }
+
+  .small-padding {
+    padding: 10px;
+  }
+
+  .top-border {
+    border-top-color: #b9b9b9;
+  }
+
+  .large-spacing .v-vertical > .v-spacing {
+    height: 30px;
+  }
+
+  .hr {
+    color: #cccccc;
+    -webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
   }
 
   .v-select-select {

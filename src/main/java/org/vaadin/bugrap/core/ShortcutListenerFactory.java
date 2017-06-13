@@ -9,7 +9,9 @@ import java.util.function.BiConsumer;
  */
 public class ShortcutListenerFactory {
 
-  public static ShortcutListener newShortcutListener(String caption, int keyCode, int[] modifiers, BiConsumer<Object, Object> consumer) {
+  public static ShortcutListener newShortcutListener(String caption, int keyCode, int[] modifiers,
+                                                     BiConsumer<Object, Object> consumer) {
+
     return new ShortcutListener(caption, keyCode, modifiers) {
       @Override
       public void handleAction(Object sender, Object target) {

@@ -26,15 +26,10 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ApplicationModel : Serializable {
+class ApplicationModel() : Serializable {
 
-  @Inject
   private lateinit var searchFacade: RepositorySearchFacade
-
-  @Inject
   private lateinit var filter: Filter
-
-  @Inject
   private lateinit var reportsRefreshEvent: Event<ReportsRefreshEvent>
 
   private lateinit var projects: List<Project>
@@ -58,6 +53,14 @@ class ApplicationModel : Serializable {
   private var user: Reporter? = null
   fun getUsername() = user
 
+  @Inject
+  constructor(searchFacade: RepositorySearchFacade, filter: Filter, reportsRefreshEvent: Event<ReportsRefreshEvent>)
+      : this() {
+    this.searchFacade = searchFacade
+    this.filter = filter
+    this.reportsRefreshEvent = reportsRefreshEvent
+  }
+
   @PostConstruct
   fun setup() {
     user = bugrapRepository.authenticate("developer", "developer")
@@ -67,12 +70,12 @@ class ApplicationModel : Serializable {
     refreshReports(false)
   }
 
-  private fun updateVersionInfo() {
+  internal fun updateVersionInfo() {
     versions = bugrapRepository.findProjectVersions(selectedProject).sortedBy { it.releaseDate }
     selectedVersion = null
   }
 
-  private fun refreshReports(fireEvent: Boolean = true) {
+  internal fun refreshReports(fireEvent: Boolean = true) {
     val query = ReportsQuery().apply {
       project = selectedProject
       if (selectedVersion != null) projectVersion = selectedVersion
@@ -87,7 +90,7 @@ class ApplicationModel : Serializable {
 
   fun searchReports(@Observes event: SearchEvent) {
     val statuses = if (filter.statuses.isEmpty()) null else filter.statuses
-    reports = HashSet(searchFacade.search(event.searchTerm, selectedProject, selectedVersion, statuses))
+    reports = HashSet(searchFacade.search(event.searchTerm, getSelectedProject(), getSelectedVersion(), statuses))
     reportsRefreshEvent.fire(ReportsRefreshEvent())
   }
 
@@ -116,7 +119,7 @@ class ApplicationModel : Serializable {
   companion object {
     private const val serialVersionUID = 1L
     private val dbDir = "${System.getProperty("user.home")}/.bugrap"
-    @JvmStatic val bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
+    @JvmStatic internal var bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
 
     init {
       if (!File(dbDir).exists()) {

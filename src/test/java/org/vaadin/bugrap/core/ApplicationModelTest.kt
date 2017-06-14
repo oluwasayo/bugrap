@@ -70,7 +70,6 @@ class ApplicationModelTest {
     reset(sut)
   }
 
-
   @Test
   fun setup() {
     println("Test @PostConstruct")
@@ -97,16 +96,14 @@ class ApplicationModelTest {
   fun searchReports() {
     println("Test searchReports")
 
-    val searchTerm = "Sayo"
-
     val project = Project()
     val version = ProjectVersion()
-
     sut.apply {
       doReturn(project).whenever(this).getSelectedProject()
       doReturn(version).whenever(this).getSelectedVersion()
     }
 
+    val searchTerm = "Sayo"
     sut.searchReports(SearchEvent(searchTerm))
 
     println("  -> Verify search facade invoked with null statuses when filter is empty")
@@ -140,6 +137,8 @@ class ApplicationModelTest {
   fun switchProject() {
     println("Test switchProject")
 
+    verifyObserver(sut, "switchProject", ProjectChangeEvent::class)
+
     val project = Project()
     sut.apply {
       doReturn(ProjectVersion()).whenever(this).getSelectedVersion()
@@ -162,6 +161,8 @@ class ApplicationModelTest {
   fun switchVersion() {
     println("Test switchVersion")
 
+    verifyObserver(sut, "switchVersion", VersionChangeEvent::class)
+
     doNothing().whenever(sut).refreshReports()
 
     val version = ProjectVersion()
@@ -178,6 +179,8 @@ class ApplicationModelTest {
   fun applyFilter() {
     println("Test applyFilter")
 
+    verifyObserver(sut, "applyFilter", FilterChangeEvent::class)
+
     doNothing().whenever(sut).refreshReports()
 
     sut.applyFilter(FilterChangeEvent())
@@ -189,6 +192,8 @@ class ApplicationModelTest {
   @Test
   fun updateSelectedReports() {
     println("Test updateSelectedReports")
+
+    verifyObserver(sut, "updateSelectedReports", ReportsSelectionEvent::class)
 
     println("  -> Verify selected reports applied")
     assertTrue(sut.getSelectedReports().isEmpty())

@@ -5,6 +5,9 @@ import com.vaadin.event.ShortcutListener;
 import java.util.function.BiConsumer;
 
 /**
+ * This class exist only because Kotlin compiler does not interpret varargs as array,
+ * making it hard to target methods with parameter types (T, T...)
+ *
  * @author oladeji
  */
 public class ShortcutListenerFactory {

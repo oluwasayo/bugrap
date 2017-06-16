@@ -43,56 +43,60 @@ import javax.inject.Inject
  */
 @CDIUI("")
 @Theme("mytheme")
-class ReportsOverviewUI : UI() {
+class ReportsOverviewUI() : UI() {
 
-  @Inject
   private lateinit var applicationModel: ApplicationModel
-
-  @Inject
   private lateinit var projectSelectorBar: ProjectSelectorBar
-
-  @Inject
   private lateinit var actionsBar: ActionsBar
-
-  @Inject
   private lateinit var versionBar: VersionBar
-
-  @Inject
   private lateinit var filterBar: FilterBar
-
-  @Inject
   private lateinit var propertiesBar: PropertiesBar
-
-  @Inject lateinit var descriptionBar: ReportDescriptionBar
-
-  @Inject
-  private lateinit var reportSelectionEvent: Event<ReportsSelectionEvent>
+  private lateinit var descriptionBar: ReportDescriptionBar
+  private lateinit var reportsSelectionEvent: Event<ReportsSelectionEvent>
 
   private val reportsRefresh = ReportsRefreshEvent()
+  internal val table = Grid<Report>(Report::class.java)
+  internal val split = VerticalSplitPanel()
 
-  private val table = Grid<Report>(Report::class.java)
+  @Inject
+  constructor(applicationModel: ApplicationModel,
+              projectSelectorBar: ProjectSelectorBar,
+              actionsBar: ActionsBar,
+              versionBar: VersionBar,
+              filterBar: FilterBar,
+              propertiesBar: PropertiesBar,
+              descriptionBar: ReportDescriptionBar,
+              reportsSelectionEvent: Event<ReportsSelectionEvent>) : this() {
 
-  private val split = VerticalSplitPanel()
+    this.applicationModel = applicationModel
+    this.projectSelectorBar = projectSelectorBar
+    this.actionsBar = actionsBar
+    this.versionBar = versionBar
+    this.filterBar = filterBar
+    this.propertiesBar = propertiesBar
+    this.descriptionBar = descriptionBar
+    this.reportsSelectionEvent = reportsSelectionEvent
+  }
 
   override fun init(vaadinRequest: VaadinRequest) {
-    val verticalLayout = VerticalLayout()
-
     table.apply {
       setSizeFull()
       setSelectionMode(MULTI)
       removeColumn(DESCRIPTION)
 
-      addSelectionListener { reportSelectionEvent.fire(ReportsSelectionEvent(it.allSelectedItems)) }
+      addSelectionListener {
+        reportsSelectionEvent.fire(ReportsSelectionEvent(it.allSelectedItems))
+      }
 
       addItemClickListener {
         if (it.mouseEventDetails.isDoubleClick) {
-          page.open(ExternalResource(CONTEXT_ROOT + it.item.id.toString()), NEW_WINDOW, false)
+          page.open(ExternalResource(CONTEXT_ROOT + it.item.id), NEW_WINDOW, false)
         }
       }
 
       addShortcutListener(newShortcutListener("Enter", KeyCode.ENTER, intArrayOf()) { sender, target ->
         if (target is Grid<*> && target.selectedItems.size >= 1) {
-          page.open(ExternalResource(CONTEXT_ROOT + (target as Grid<Report>).selectedItems.last().id.toString()),
+          page.open(ExternalResource(CONTEXT_ROOT + (target as Grid<Report>).selectedItems.last().id),
               NEW_WINDOW, false)
         }
       })
@@ -114,7 +118,7 @@ class ReportsOverviewUI : UI() {
       setSplitPosition(100f, PERCENTAGE)
     }
 
-    content = verticalLayout.apply {
+    content = VerticalLayout().apply {
       addComponents(
           projectSelectorBar.apply { setWidth(100f, PERCENTAGE) },
           actionsBar.apply { setWidth(100f, PERCENTAGE) },

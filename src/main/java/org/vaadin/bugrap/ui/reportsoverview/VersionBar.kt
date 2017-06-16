@@ -33,23 +33,28 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class VersionBar : CustomComponent() {
+class VersionBar() : CustomComponent() {
 
-  @Inject
   private lateinit var applicationModel: ApplicationModel
-
-  @Inject
   private lateinit var versionChangeEvent: Event<VersionChangeEvent>
 
-  private lateinit var versionSelector: NativeSelect<ProjectVersion>
+  internal val versionSelector = NativeSelect<ProjectVersion>(null, emptySet<ProjectVersion>())
 
-  val darkProgress = Label()
-  val middleProgress = Label()
-  val lightProgress = Label()
+  internal val darkProgress = Label()
+  internal val middleProgress = Label()
+  internal val lightProgress = Label()
+
+  @Inject
+  constructor(applicationModel: ApplicationModel, versionChangeEvent: Event<VersionChangeEvent>) : this() {
+    this.applicationModel = applicationModel
+    this.versionChangeEvent = versionChangeEvent
+  }
 
   @PostConstruct
   fun setup() {
-    versionSelector = NativeSelect<ProjectVersion>(null, applicationModel.getVersions()).apply {
+    versionSelector.apply {
+      this.setItems(applicationModel.getVersions())
+
       isEmptySelectionAllowed = true
       emptySelectionCaption = ALL_VERSIONS
       setSelectedItem(applicationModel.getSelectedVersion())
@@ -61,7 +66,7 @@ class VersionBar : CustomComponent() {
 
       addSelectionListener {
         versionChangeEvent.fire(VersionChangeEvent(it.selectedItem.orElse(null)))
-        updateProgressBars()
+        updateDistributionBars()
       }
     }
 
@@ -82,7 +87,7 @@ class VersionBar : CustomComponent() {
       addStyleName(ROUNDED_EAST)
     }
 
-    updateProgressBars()
+    updateDistributionBars()
 
     val progressIndicator = CssLayout().apply {
       addComponents(darkProgress, middleProgress, lightProgress)
@@ -110,10 +115,10 @@ class VersionBar : CustomComponent() {
     val versions = bugrapRepository.findProjectVersions(event.project).sortedBy { it.releaseDate }
     versionSelector.setItems(versions)
     versionSelector.setSelectedItem(null)
-    updateProgressBars()
+    updateDistributionBars()
   }
 
-  fun updateProgressBars() {
+  fun updateDistributionBars() {
     val closed: Long
     val open: Long
     val unassigned: Long

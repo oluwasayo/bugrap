@@ -13,7 +13,7 @@ import com.vaadin.ui.Label
 class HorizontalRule : CustomComponent() {
 
   init {
-    compositionRoot = Label("<hr />", HTML).apply {
+    compositionRoot = Label("<hr style=\"color: #919191;\" />", HTML).apply {
       setHeight(1f, PIXELS)
       setWidth(100f, PERCENTAGE)
     }

@@ -17,13 +17,14 @@
     <vaadin.version>8.0.6</vaadin.version>
     <vaadin.plugin.version>8.0.6</vaadin.plugin.version>
     <vaadin.testbench.version>5.0.0</vaadin.testbench.version>
+    <kotlin.version>1.1.2-4</kotlin.version>
+    <arquillian.version>1.1.13.Final</arquillian.version>
     <jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <!-- If there are no local customisations, this can also be "fetch" or "cdn" -->
     <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
-    <kotlin.version>1.1.2-4</kotlin.version>
   </properties>
 
   <repositories>
@@ -39,6 +40,7 @@
 
   <dependencyManagement>
     <dependencies>
+      <!--Import Scope-->
       <dependency>
         <groupId>com.vaadin</groupId>
         <artifactId>vaadin-bom</artifactId>
@@ -50,6 +52,7 @@
   </dependencyManagement>
 
   <dependencies>
+    <!--Provided Scope-->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
@@ -62,11 +65,25 @@
       <version>1.2</version>
       <scope>provided</scope>
     </dependency>
+
+    <!--Runtime Scope-->
     <dependency>
       <groupId>org.jboss.weld.servlet</groupId>
       <artifactId>weld-servlet</artifactId>
       <version>2.4.0.Final</version>
       <scope>runtime</scope>
+    </dependency>
+
+    <!--Compile Scope-->
+    <dependency>
+      <groupId>org.vaadin</groupId>
+      <artifactId>bugrap-domain</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib-jre8</artifactId>
+      <version>${kotlin.version}</version>
     </dependency>
     <dependency>
       <groupId>com.vaadin</groupId>
@@ -88,6 +105,8 @@
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-themes</artifactId>
     </dependency>
+
+    <!--Test Scope-->
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin-testbench</artifactId>
@@ -95,19 +114,21 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.vaadin</groupId>
-      <artifactId>bugrap-domain</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib-jre8</artifactId>
-      <version>${kotlin.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-test</artifactId>
       <version>${kotlin.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.nhaarman</groupId>
+      <artifactId>mockito-kotlin</artifactId>
+      <version>1.5.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -201,6 +222,7 @@
             <option>all-open:annotation=javax.enterprise.context.Dependent</option>
             <option>all-open:annotation=javax.enterprise.context.RequestScoped</option>
             <option>all-open:annotation=javax.enterprise.context.SessionScoped</option>
+            <option>all-open:annotation=com.vaadin.cdi.CDIUI</option>
           </pluginOptions>
         </configuration>
 
@@ -225,6 +247,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
         <executions>
           <execution>
             <id>compile</id>
@@ -238,6 +261,45 @@
             <phase>test-compile</phase>
             <goals>
               <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.19.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.7.7.201606060606</version>
+        <configuration>
+          <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+          <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>jacoco-initialize</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>jacoco-site</id>
+            <phase>package</phase>
+            <goals>
+              <goal>report</goal>
             </goals>
           </execution>
         </executions>

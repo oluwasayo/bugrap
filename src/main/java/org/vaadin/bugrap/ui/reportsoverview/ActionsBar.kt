@@ -44,15 +44,18 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ActionsBar : CustomComponent() {
+class ActionsBar() : CustomComponent() {
 
-  @Inject
   private lateinit var applicationModel: ApplicationModel
-
-  @Inject
   private lateinit var searchEvent: Event<SearchEvent>
 
-  private val projectCountLabel = Label()
+  internal val projectCountLabel = Label()
+
+  @Inject
+  constructor(applicationModel: ApplicationModel, searchEvent: Event<SearchEvent>) : this() {
+    this.applicationModel = applicationModel
+    this.searchEvent = searchEvent
+  }
 
   @PostConstruct
   fun setup() {
@@ -117,7 +120,7 @@ class ActionsBar : CustomComponent() {
     setSizeUndefined()
   }
 
-  private fun countReports(): String {
+  internal fun countReports(): String {
     if (applicationModel.getSelectedVersion() != null) {
       return bugrapRepository.countReports(applicationModel.getSelectedVersion()).toString()
     }

@@ -34,15 +34,18 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class FilterBar : CustomComponent() {
+class FilterBar() : CustomComponent() {
 
-  @Inject
   private lateinit var filter: Filter
-
-  @Inject
   private lateinit var filterChangeEvent: Event<FilterChangeEvent>
 
-  val filterChange = FilterChangeEvent()
+  internal val filterChange = FilterChangeEvent()
+
+  @Inject
+  constructor(filter: Filter, filterChangeEvent: Event<FilterChangeEvent>) : this() {
+    this.filter = filter
+    this.filterChangeEvent = filterChangeEvent
+  }
 
   @PostConstruct
   private fun setup() {

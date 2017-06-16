@@ -63,7 +63,7 @@ class ApplicationModelTest {
   fun init() {
     filter = Filter()
     event = mock<Event<ReportsRefreshEvent>>()
-    searchFacade = spy(RepositorySearchFacade())
+    searchFacade = spy<RepositorySearchFacade>()
 
     sut = spy(ApplicationModel(searchFacade, filter, event))
     sut.setup()
@@ -72,7 +72,7 @@ class ApplicationModelTest {
 
   @Test
   fun setup() {
-    println("Test @PostConstruct")
+    println("@PostConstruct")
 
     sut.setup()
 
@@ -94,7 +94,7 @@ class ApplicationModelTest {
 
   @Test
   fun searchReports() {
-    println("Test searchReports")
+    println("searchReports")
 
     val project = Project()
     val version = ProjectVersion()
@@ -118,7 +118,7 @@ class ApplicationModelTest {
       println("  -> Verify correct search term argument passed to search facade")
       assertEquals(searchTerm, it.getArgument(0))
 
-      val statuses = it.getArgument<Int>(3) as Set<Status>
+      val statuses = it.getArgument<Set<Status>>(3)
       println("  -> Verify correct statuses argument passed to search facade")
       assertEquals(1, statuses.size)
       assertEquals(Status.DUPLICATE, statuses.first())
@@ -135,7 +135,7 @@ class ApplicationModelTest {
 
   @Test
   fun switchProject() {
-    println("Test switchProject")
+    println("switchProject")
 
     verifyObserver(sut, "switchProject", ProjectChangeEvent::class)
 
@@ -159,7 +159,7 @@ class ApplicationModelTest {
 
   @Test
   fun switchVersion() {
-    println("Test switchVersion")
+    println("switchVersion")
 
     verifyObserver(sut, "switchVersion", VersionChangeEvent::class)
 
@@ -177,7 +177,7 @@ class ApplicationModelTest {
 
   @Test
   fun applyFilter() {
-    println("Test applyFilter")
+    println("applyFilter")
 
     verifyObserver(sut, "applyFilter", FilterChangeEvent::class)
 
@@ -191,7 +191,7 @@ class ApplicationModelTest {
 
   @Test
   fun updateSelectedReports() {
-    println("Test updateSelectedReports")
+    println("updateSelectedReports")
 
     verifyObserver(sut, "updateSelectedReports", ReportsSelectionEvent::class)
 

@@ -9,8 +9,9 @@ import kotlin.test.assertTrue
  * @author oladeji
  */
 fun <T : Any> verifyObserver(sut: T, function: String, event: KClass<*>) {
-  val sutName = sut.javaClass.simpleName
-  println("  -> Verify ${sutName.substring(0, sutName.indexOf('$'))}.$function observes ${event.simpleName}")
+  var sutName = sut.javaClass.simpleName
+  sutName = if (sutName.contains('$')) sutName.substring(0, sutName.indexOf('$')) else sutName
+  println("  -> Verify ${sutName}.$function observes ${event.simpleName}")
   val parameter = sut.javaClass.getMethod(function, event.javaObjectType).parameters[0]
   assertTrue(parameter.isAnnotationPresent(Observes::class.java))
 }

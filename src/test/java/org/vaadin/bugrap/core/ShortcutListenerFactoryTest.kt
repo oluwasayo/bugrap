@@ -13,7 +13,9 @@ import org.vaadin.bugrap.core.ShortcutListenerFactory.newShortcutListener
 class ShortcutListenerFactoryTest {
 
   @Test
-  fun testNewShortcutListener() {
+  fun newShortcutListener() {
+    println("newShortcutListener")
+
     var actionPerformed = false
     val task = { o: Any?, o2: Any? -> actionPerformed = true }
 

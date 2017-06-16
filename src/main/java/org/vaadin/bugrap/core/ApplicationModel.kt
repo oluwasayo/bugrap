@@ -47,7 +47,7 @@ class ApplicationModel() : Serializable {
   private lateinit var reports: Set<Report>
   fun getReports() = reports
 
-  private var selectedReports = hashSetOf<Report>()
+  private var selectedReports = mutableSetOf<Report>()
   fun getSelectedReports() = selectedReports
 
   private var user: Reporter? = null

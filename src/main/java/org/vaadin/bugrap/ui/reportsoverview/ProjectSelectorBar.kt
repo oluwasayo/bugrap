@@ -27,13 +27,16 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ProjectSelectorBar : CustomComponent() {
+class ProjectSelectorBar() : CustomComponent() {
 
-  @Inject
   private lateinit var applicationModel: ApplicationModel
+  private lateinit var projectChangeEvent: Event<ProjectChangeEvent>
 
   @Inject
-  private lateinit var projectChangeEvent: Event<ProjectChangeEvent>
+  constructor(applicationModel: ApplicationModel, projectChangeEvent: Event<ProjectChangeEvent>) : this() {
+    this.applicationModel = applicationModel
+    this.projectChangeEvent = projectChangeEvent
+  }
 
   @PostConstruct
   fun setup() {

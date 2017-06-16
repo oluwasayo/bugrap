@@ -49,24 +49,27 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class PropertiesBar : CustomComponent() {
+class PropertiesBar() : CustomComponent() {
 
-  @Inject
   private lateinit var applicationModel: ApplicationModel
-
-  @Inject
   private lateinit var reportsRefreshEvent: Event<ReportsRefreshEvent>
 
-  private val newWindowLink = Link()
-  private val reportDetailLabel = Label()
-  private val fixedTextLabel = Label(SELECT_A_SINGLE_REPORT)
+  internal val newWindowLink = Link()
+  internal val reportDetailLabel = Label()
+  internal val fixedTextLabel = Label(SELECT_A_SINGLE_REPORT)
 
   private val controlsBar = HorizontalLayout()
-  private val priorityControl = NativeSelect<Priority>(PRIORITY.toUpperCase(), Priority.values().asList())
-  private val typeControl = NativeSelect<Type>(ISSUE_TYPE.toUpperCase(), Type.values().asList())
-  private val statusControl = NativeSelect<Status>(STATUS.toUpperCase(), Status.values().asList())
-  private val assigneeControl = NativeSelect<Reporter>(ASSIGNED_TO.toUpperCase())
-  private val versionControl = NativeSelect<ProjectVersion>(VERSION.toUpperCase())
+  internal val priorityControl = NativeSelect<Priority>(PRIORITY.toUpperCase(), Priority.values().asList())
+  internal val typeControl = NativeSelect<Type>(ISSUE_TYPE.toUpperCase(), Type.values().asList())
+  internal val statusControl = NativeSelect<Status>(STATUS.toUpperCase(), Status.values().asList())
+  internal val assigneeControl = NativeSelect<Reporter>(ASSIGNED_TO.toUpperCase())
+  internal val versionControl = NativeSelect<ProjectVersion>(VERSION.toUpperCase())
+
+  @Inject
+  constructor(applicationModel: ApplicationModel, reportsRefreshEvent: Event<ReportsRefreshEvent>) : this() {
+    this.applicationModel = applicationModel
+    this.reportsRefreshEvent = reportsRefreshEvent
+  }
 
   @PostConstruct
   fun setup() {
@@ -158,7 +161,7 @@ class PropertiesBar : CustomComponent() {
 
     if (!event.selectedReports.isEmpty()) {
       newWindowLink.caption = event.selectedReports.first().summary
-      newWindowLink.resource = ExternalResource(CONTEXT_ROOT + event.selectedReports.first().id.toString())
+      newWindowLink.resource = ExternalResource(CONTEXT_ROOT + event.selectedReports.first().id)
 
       event.selectedReports.map { it.priority }.distinct().apply {
         priorityControl.setSelectedItem(if (count() == 1) first() else null)

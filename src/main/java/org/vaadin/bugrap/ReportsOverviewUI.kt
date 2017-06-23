@@ -14,6 +14,7 @@ import com.vaadin.ui.Grid.SelectionMode.MULTI
 import com.vaadin.ui.UI
 import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.VerticalSplitPanel
+import org.vaadin.bugrap.core.ASSIGNEE_COLUMN
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.CONTEXT_ROOT
 import org.vaadin.bugrap.core.DESCRIPTION
@@ -21,6 +22,7 @@ import org.vaadin.bugrap.core.ID
 import org.vaadin.bugrap.core.NEW_WINDOW
 import org.vaadin.bugrap.core.PRIORITY
 import org.vaadin.bugrap.core.SMALL_TOP_MARGIN
+import org.vaadin.bugrap.core.STATUS_COLUMN
 import org.vaadin.bugrap.core.ShortcutListenerFactory.newShortcutListener
 import org.vaadin.bugrap.core.VERSION
 import org.vaadin.bugrap.domain.entities.Report
@@ -141,7 +143,7 @@ class ReportsOverviewUI() : UI() {
 
     if (applicationModel.getSelectedVersion() == null) {
       if (table.getColumn(VERSION) == null) table.addColumn(VERSION)
-      table.setColumnOrder(VERSION, PRIORITY, ID)
+      table.setColumnOrder(VERSION, PRIORITY, ID, ASSIGNEE_COLUMN, STATUS_COLUMN)
       table.setSortOrder(
           asc(table.getColumn(VERSION))
           .thenDesc(table.getColumn(PRIORITY))
@@ -149,7 +151,7 @@ class ReportsOverviewUI() : UI() {
       )
     } else {
       if (table.getColumn(VERSION) != null) table.removeColumn(VERSION)
-      table.setColumnOrder(PRIORITY, ID)
+      table.setColumnOrder(PRIORITY, ID, ASSIGNEE_COLUMN, STATUS_COLUMN)
       table.sort(PRIORITY, DESCENDING)
     }
 

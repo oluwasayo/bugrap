@@ -3,8 +3,11 @@ package org.vaadin.bugrap
 import com.vaadin.testbench.TestBenchTestCase
 import com.vaadin.testbench.elements.ButtonElement
 import com.vaadin.testbench.elements.GridElement
+import com.vaadin.testbench.elements.LabelElement
+import com.vaadin.testbench.elements.LinkElement
 import com.vaadin.testbench.elements.MenuBarElement
 import com.vaadin.testbench.elements.NativeSelectElement
+import com.vaadin.testbench.elements.TextAreaElement
 import com.vaadin.testbench.elements.TextFieldElement
 import com.vaadin.testbench.elementsbase.AbstractElement
 import com.vaadin.ui.themes.ValoTheme.BUTTON_PRIMARY
@@ -192,11 +195,31 @@ class ReportsOverviewUIIT : TestBenchTestCase() {
   fun testGridSelection() {
     println("testGridSelection")
 
-    assertTrue(select<GridElement>().exists())
+    val summary = select<GridElement>().first().getCell(1, 6).text
 
+    println("  -> Verify report description and properties bars are displayed when one row is selected")
+    select<GridElement>().first().getCell(1, 0).click()
+    val detailArea = select<TextAreaElement>()
+    assertTrue(detailArea.exists())
+    assertTrue(detailArea.first().isDisplayed)
+    val summaryLink = select<LinkElement>().caption(summary)
+    assertTrue(summaryLink.exists())
+    assertTrue(summaryLink.first().isDisplayed)
+
+    println("  -> Verify report description and properties bars disappear when the only selected row is deselected")
+    select<GridElement>().first().getCell(1, 0).click()
+    assertFalse(select<TextAreaElement>().exists())
+    assertFalse(select<LinkElement>().exists())
+
+    println("  -> Verify report description bar is not displayed when more than one row is selected")
+    select<GridElement>().first().getCell(1, 0).click()
+    select<GridElement>().first().getCell(2, 0).click()
+    assertFalse(select<TextAreaElement>().exists())
+    assertFalse(select<LinkElement>().exists())
+    assertTrue(select<LabelElement>().all().map { it.text }.filter { it.equals("2 reports selected") }.isNotEmpty())
   }
 
   fun testReportProperties() {
-
+    println("testReportProperties")
   }
 }

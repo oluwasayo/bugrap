@@ -20,6 +20,10 @@ import org.vaadin.bugrap.core.EVERYONE
 import org.vaadin.bugrap.core.MENUBAR_THEMED
 import org.vaadin.bugrap.core.ONLY_ME
 import org.vaadin.bugrap.core.OPEN
+import org.vaadin.bugrap.core.PRIORITY
+import org.vaadin.bugrap.core.REVERT
+import org.vaadin.bugrap.core.UPDATE
+import org.vaadin.bugrap.domain.entities.Report.Priority.BLOCKER
 import org.vaadin.bugrap.domain.entities.Report.Status.CANT_FIX
 import org.vaadin.bugrap.domain.entities.Report.Status.INVALID
 import kotlin.test.assertEquals
@@ -219,7 +223,43 @@ class ReportsOverviewUIIT : TestBenchTestCase() {
     assertTrue(select<LabelElement>().all().map { it.text }.filter { it.equals("2 reports selected") }.isNotEmpty())
   }
 
+  @Test
   fun testReportProperties() {
     println("testReportProperties")
+
+    var blockers = select<GridElement>().first().rows.filter { it.getCell(2).text == BLOCKER.name }.count()
+    assertEquals(0, blockers)
+
+    println("  -> Verify \"revert\" button")
+    select<GridElement>().first().getCell(1, 0).click()
+    select<GridElement>().first().getCell(2, 0).click()
+    select<NativeSelectElement>().caption(PRIORITY.toUpperCase()).first().selectByText("Blocker")
+    select<ButtonElement>().caption(REVERT).first().click()
+    assertEquals("Critical", select<NativeSelectElement>().caption(PRIORITY.toUpperCase()).first().value)
+
+    println("  -> Verify \"update\" button")
+    select<NativeSelectElement>().caption(PRIORITY.toUpperCase()).first().selectByText("Blocker")
+    select<ButtonElement>().caption(UPDATE).first().click()
+    select<NativeSelectElement>().first().waitForVaadin()
+    blockers = select<GridElement>().first().rows.filter { it.getCell(2).text == BLOCKER.name }.count()
+    assertEquals(2, blockers)
+
+    println("  -> Revert DB to initial state before test")
+    select<GridElement>()
+        .first()
+        .rows
+        .find { it.getCell(2).text == BLOCKER.name }!!
+        .getCell(0)
+        .click()
+
+    select<GridElement>()
+        .first()
+        .rows
+        .find { it.getCell(2).text == BLOCKER.name && !it.isSelected }!!
+        .getCell(0)
+        .click()
+
+    select<NativeSelectElement>().caption(PRIORITY.toUpperCase()).first().selectByText("Critical")
+    select<ButtonElement>().caption(UPDATE).first().click()
   }
 }

@@ -8,6 +8,8 @@ const val ID = "id"
 const val DESCRIPTION = "description"
 const val VERSION = "version"
 const val PRIORITY = "priority"
+const val STATUS_COLUMN = "status"
+const val ASSIGNEE_COLUMN = "assigned"
 
 const val ALL_VERSIONS = "All versions"
 
@@ -36,7 +38,7 @@ const val MANAGE_PROJECT = "Manage project"
 const val ASSIGNEES = "Assignees"
 const val ONLY_ME = "Only me"
 const val EVERYONE = "Everyone"
-const val STATUS = "Status"
+val STATUS = STATUS_COLUMN.capitalize()
 const val OPEN = "Open"
 const val ALL_KINDS = "All kinds"
 const val CUSTOM = "Custom"

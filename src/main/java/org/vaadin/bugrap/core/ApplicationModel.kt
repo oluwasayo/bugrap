@@ -118,10 +118,22 @@ class ApplicationModel() : Serializable {
 
   companion object {
     private const val serialVersionUID = 1L
-    private val dbDir = "${System.getProperty("user.home")}/.bugrap"
-    @JvmStatic internal var bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
+    private var dbDir: String
+    @JvmStatic internal var bugrapRepository: BugrapRepository
 
     init {
+      // Horrible hack that allows me keep the web app running while clicking individual
+      // test run in IDE without the two HSQL instances failing to acquire lock.
+      try {
+        dbDir = "${System.getProperty("user.home")}/.bugrap"
+        bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
+        bugrapRepository.authenticate("developer", "developer")
+      } catch (ex: Exception) {
+        println("Main DB locked by another application instance. Falling back to test DB.")
+        dbDir = "${System.getProperty("user.home")}/.bugrap_test"
+        bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
+      }
+
       if (!File(dbDir).exists()) {
         println("Bugrap DB not found in home directory. Generating test data...")
         bugrapRepository.populateWithTestData()

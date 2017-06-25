@@ -20,6 +20,7 @@
     <kotlin.version>1.1.2-4</kotlin.version>
     <jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <!-- If there are no local customisations, this can also be "fetch" or "cdn" -->
@@ -46,6 +47,12 @@
         <version>${vaadin.version}</version>
         <type>pom</type>
         <scope>import</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-testbench</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -193,6 +200,33 @@
 
           <contextXml>src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
         </configuration>
+
+        <executions>
+          <execution>
+            <id>start-jetty</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+            <configuration>
+              <scanIntervalSeconds>0</scanIntervalSeconds>
+              <stopKey>STOP</stopKey>
+              <stopPort>8866</stopPort>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>stop-jetty</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+            <configuration>
+              <stopKey>STOP</stopKey>
+              <stopPort>8866</stopPort>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>

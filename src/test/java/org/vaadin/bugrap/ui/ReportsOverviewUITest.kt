@@ -15,6 +15,8 @@ import com.vaadin.shared.data.sort.SortDirection
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.Clock
 import org.vaadin.bugrap.core.PRIORITY
@@ -28,12 +30,10 @@ import org.vaadin.bugrap.domain.entities.Report.Status.FIXED
 import org.vaadin.bugrap.domain.entities.Report.Status.WONT_FIX
 import org.vaadin.bugrap.domain.entities.Report.Type.BUG
 import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
-import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.ui.reportsoverview.ActionsBar
 import org.vaadin.bugrap.ui.reportsoverview.FilterBar
+import org.vaadin.bugrap.ui.reportsoverview.MultiReportPropertiesBar
 import org.vaadin.bugrap.ui.reportsoverview.ProjectSelectorBar
-import org.vaadin.bugrap.ui.reportsoverview.PropertiesBar
 import org.vaadin.bugrap.ui.reportsoverview.ReportDescriptionBar
 import org.vaadin.bugrap.ui.reportsoverview.VersionBar
 import java.util.stream.Collectors.toSet
@@ -93,16 +93,14 @@ class ReportsOverviewUITest {
         mock<ActionsBar>(),
         mock<VersionBar>(),
         mock<FilterBar>(),
-        mock<PropertiesBar>(),
+        mock<MultiReportPropertiesBar>(),
         mock<ReportDescriptionBar>(),
         mock<Event<ReportsSelectionEvent>>()
     ))
   }
 
   @After
-  fun cleanup() {
-    reset(appModel)
-  }
+  fun cleanup() = reset(appModel)
 
   @Test
   fun updateGrid_noVersionSelected() {
@@ -180,8 +178,6 @@ class ReportsOverviewUITest {
   @Test
   fun updateSplit() {
     println("updateSplit")
-
-    val sut = spy<ReportsOverviewUI>()
 
     verifyObserver(sut, "updateSplit", ReportsSelectionEvent::class)
 

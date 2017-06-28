@@ -21,6 +21,9 @@ import com.vaadin.ui.themes.ValoTheme.BUTTON_TINY
 import com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP
 import com.vaadin.ui.themes.ValoTheme.TEXTFIELD_INLINE_ICON
 import com.vaadin.ui.themes.ValoTheme.TEXTFIELD_TINY
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.SearchEvent
+import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
 import org.vaadin.bugrap.core.LABEL_DARK
@@ -30,9 +33,6 @@ import org.vaadin.bugrap.core.REQUEST_A_FEATURE
 import org.vaadin.bugrap.core.ROUNDED_EAST
 import org.vaadin.bugrap.core.ROUNDED_WEST
 import org.vaadin.bugrap.core.SEARCH_REPORTS
-import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
-import org.vaadin.bugrap.cdi.events.SearchEvent
-import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event
@@ -44,18 +44,11 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ActionsBar() : CustomComponent() {
-
-  private lateinit var applicationModel: ApplicationModel
-  private lateinit var searchEvent: Event<SearchEvent>
+class ActionsBar @Inject constructor(private val applicationModel: ApplicationModel,
+                                     private val searchEvent: Event<SearchEvent>)
+  : CustomComponent() {
 
   internal val projectCountLabel = Label()
-
-  @Inject
-  constructor(applicationModel: ApplicationModel, searchEvent: Event<SearchEvent>) : this() {
-    this.applicationModel = applicationModel
-    this.searchEvent = searchEvent
-  }
 
   @PostConstruct
   fun setup() {

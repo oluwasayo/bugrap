@@ -102,7 +102,7 @@ class ApplicationModel() : Serializable {
   }
 
   fun switchProject(@Observes event: ProjectChangeEvent) {
-    selectedProject = event.project!!
+    selectedProject = event.project
     updateVersionInfo()
     refreshReports()
   }

@@ -29,24 +29,20 @@ import org.vaadin.bugrap.domain.entities.Report.Status
 import org.vaadin.bugrap.domain.entities.Report.Type
 import org.vaadin.bugrap.domain.entities.Reporter
 import javax.annotation.PostConstruct
-import javax.enterprise.context.Dependent
 import javax.enterprise.event.Event
 import javax.enterprise.event.Observes
-import javax.inject.Inject
 
 /**
  *
  * @author oladeji
  */
 @Proxyable
-@Dependent
-class BasePropertiesBar() : CustomComponent() {
-
-  private lateinit var reportsUpdateEvent: Event<ReportsUpdateEvent>
+abstract class AbstractPropertiesBar(protected val reportsUpdateEvent: Event<ReportsUpdateEvent>) : CustomComponent() {
 
   internal val selectedReports = mutableSetOf<Report>()
   internal val reportDetailLabel = Label()
 
+  internal val summaryBar = HorizontalLayout()
   private val controlsBar = HorizontalLayout()
   internal val priorityControl = NativeSelect<Priority>(PRIORITY.toUpperCase(), Priority.values().asList())
   internal val typeControl = NativeSelect<Type>(ISSUE_TYPE.toUpperCase(), Type.values().asList())
@@ -54,14 +50,9 @@ class BasePropertiesBar() : CustomComponent() {
   internal val assigneeControl = NativeSelect<Reporter>(ASSIGNED_TO.toUpperCase())
   internal val versionControl = NativeSelect<ProjectVersion>(VERSION.toUpperCase())
 
-  @Inject
-  constructor(reportsRefreshEvent: Event<ReportsUpdateEvent>) : this() {
-    this.reportsUpdateEvent = reportsRefreshEvent
-  }
-
   @PostConstruct
-  fun setup() {
-    val summaryBar = HorizontalLayout().apply {
+  protected fun setup() {
+    summaryBar.apply {
       setHeight(20f, PIXELS)
       addComponents(reportDetailLabel)
     }
@@ -115,7 +106,11 @@ class BasePropertiesBar() : CustomComponent() {
     setSizeUndefined()
   }
 
+  fun getSelectedReports() = selectedReports
+
   fun setSelectedReports(reports: Set<Report>, updateControls: Boolean = true) {
+    if (reports.size != 1) throw IllegalArgumentException("Only one report permitted")
+
     synchronized(selectedReports) {
       selectedReports.clear()
       selectedReports.addAll(reports)
@@ -124,7 +119,7 @@ class BasePropertiesBar() : CustomComponent() {
     if (updateControls) refreshControls(ReportsUpdateEvent(reports))
   }
 
-  protected fun refreshControls(@Observes event: ReportsUpdateEvent) {
+  fun refreshControls(@Observes event: ReportsUpdateEvent) {
     if (selectedReports.intersect(event.reports).isEmpty()) return
 
     with(selectedReports.first()) {
@@ -134,10 +129,11 @@ class BasePropertiesBar() : CustomComponent() {
       statusControl.setSelectedItem(status)
       assigneeControl.setSelectedItem(assigned)
       versionControl.setItems(bugrapRepository.findProjectVersions(project))
+      versionControl.setSelectedItem(version)
     }
   }
 
-  protected fun saveReports() {
+  fun saveReports() {
     selectedReports.first().apply {
       priority = priorityControl.selectedItem.orElse(null)
       type = typeControl.selectedItem.orElse(null)

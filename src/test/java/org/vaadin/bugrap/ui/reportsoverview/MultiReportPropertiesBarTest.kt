@@ -9,12 +9,10 @@ import org.junit.Before
 import org.junit.Test
 import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
 import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
-import org.vaadin.bugrap.core.ApplicationModel
+import org.vaadin.bugrap.cdi.events.ReportsUpdateEvent
 import org.vaadin.bugrap.core.CONTEXT_ROOT
 import org.vaadin.bugrap.core.Clock.Companion.currentTimeAsDate
-import org.vaadin.bugrap.core.Filter
 import org.vaadin.bugrap.core.verifyObserver
-import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
@@ -31,16 +29,13 @@ import kotlin.test.assertTrue
 /**
  * @author oladeji
  */
-class PropertiesBarTest {
+class MultiReportPropertiesBarTest {
 
-  private lateinit var sut: PropertiesBar
-  private lateinit var appModel: ApplicationModel
+  private lateinit var sut: MultiReportPropertiesBar
 
   @Before
   fun init() {
-    appModel = spy(ApplicationModel(mock<RepositorySearchFacade>(), Filter(), mock<Event<ReportsRefreshEvent>>()))
-    appModel.setup()
-    sut = spy(PropertiesBar(appModel, mock<Event<ReportsRefreshEvent>>()))
+    sut = spy(MultiReportPropertiesBar(mock<Event<ReportsRefreshEvent>>(), mock<Event<ReportsUpdateEvent>>()))
   }
 
   @Test
@@ -171,12 +166,12 @@ class PropertiesBarTest {
     val event = ReportsRefreshEvent()
 
     println("  -> Verify is invisible when no report is selected")
-    doReturn(emptySet<Report>()).whenever(appModel).getSelectedReports()
+    doReturn(emptySet<Report>()).whenever(sut).getSelectedReports()
     sut.updateProperties(event)
     assertFalse(sut.isVisible)
 
     println("  -> Verify is visible when one or more reports are selected")
-    doReturn(setOf(Report())).whenever(appModel).getSelectedReports()
+    doReturn(setOf(Report())).whenever(sut).getSelectedReports()
     sut.updateProperties(event)
     assertTrue(sut.isVisible)
   }

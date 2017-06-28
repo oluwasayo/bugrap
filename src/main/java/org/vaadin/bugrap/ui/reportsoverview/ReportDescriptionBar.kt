@@ -9,14 +9,14 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Label
 import com.vaadin.ui.TextArea
 import com.vaadin.ui.VerticalLayout
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.Clock.Companion.currentTimeAsDate
 import org.vaadin.bugrap.core.LABEL_GRAY_TEXT
 import org.vaadin.bugrap.core.SMALL_TOP_MARGIN
 import org.vaadin.bugrap.core.TOP_BORDER
 import org.vaadin.bugrap.core.WIDE_TEXTAREA
-import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
-import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import java.util.Date
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
@@ -28,17 +28,10 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ReportDescriptionBar() : CustomComponent() {
-
-  private lateinit var applicationModel: ApplicationModel
+class ReportDescriptionBar @Inject constructor(private val applicationModel: ApplicationModel) : CustomComponent() {
 
   internal val infoLabel = Label()
   internal val descriptionArea = TextArea()
-
-  @Inject
-  constructor(applicationModel: ApplicationModel) : this() {
-    this.applicationModel = applicationModel
-  }
 
   @PostConstruct
   fun setup() {

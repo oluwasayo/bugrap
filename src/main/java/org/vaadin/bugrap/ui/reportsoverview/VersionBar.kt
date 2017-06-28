@@ -9,6 +9,8 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Label
 import com.vaadin.ui.NativeSelect
 import com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import org.vaadin.bugrap.core.ALL_VERSIONS
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
@@ -20,8 +22,6 @@ import org.vaadin.bugrap.core.REPORT_FOR
 import org.vaadin.bugrap.core.ROUNDED_EAST
 import org.vaadin.bugrap.core.ROUNDED_WEST
 import org.vaadin.bugrap.domain.entities.ProjectVersion
-import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
-import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event
@@ -33,22 +33,15 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class VersionBar() : CustomComponent() {
-
-  private lateinit var applicationModel: ApplicationModel
-  private lateinit var versionChangeEvent: Event<VersionChangeEvent>
+class VersionBar @Inject constructor(private val applicationModel: ApplicationModel,
+                                     private val versionChangeEvent: Event<VersionChangeEvent>)
+  : CustomComponent() {
 
   internal val versionSelector = NativeSelect<ProjectVersion>(null, emptySet<ProjectVersion>())
 
   internal val darkProgress = Label()
   internal val middleProgress = Label()
   internal val lightProgress = Label()
-
-  @Inject
-  constructor(applicationModel: ApplicationModel, versionChangeEvent: Event<VersionChangeEvent>) : this() {
-    this.applicationModel = applicationModel
-    this.versionChangeEvent = versionChangeEvent
-  }
 
   @PostConstruct
   fun setup() {

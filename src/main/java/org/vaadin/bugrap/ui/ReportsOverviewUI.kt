@@ -31,8 +31,8 @@ import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.ui.reportsoverview.ActionsBar
 import org.vaadin.bugrap.ui.reportsoverview.FilterBar
 import org.vaadin.bugrap.ui.reportsoverview.HorizontalRule
+import org.vaadin.bugrap.ui.reportsoverview.MultiReportPropertiesBar
 import org.vaadin.bugrap.ui.reportsoverview.ProjectSelectorBar
-import org.vaadin.bugrap.ui.reportsoverview.PropertiesBar
 import org.vaadin.bugrap.ui.reportsoverview.ReportDescriptionBar
 import org.vaadin.bugrap.ui.reportsoverview.VersionBar
 import javax.enterprise.event.Event
@@ -45,40 +45,20 @@ import javax.inject.Inject
  */
 @CDIUI("home")
 @Theme("mytheme")
-class ReportsOverviewUI() : UI() {
-
-  private lateinit var applicationModel: ApplicationModel
-  private lateinit var projectSelectorBar: ProjectSelectorBar
-  private lateinit var actionsBar: ActionsBar
-  private lateinit var versionBar: VersionBar
-  private lateinit var filterBar: FilterBar
-  private lateinit var propertiesBar: PropertiesBar
-  private lateinit var descriptionBar: ReportDescriptionBar
-  private lateinit var reportsSelectionEvent: Event<ReportsSelectionEvent>
+class ReportsOverviewUI @Inject constructor(
+    private val applicationModel: ApplicationModel,
+    private val projectSelectorBar: ProjectSelectorBar,
+    private val actionsBar: ActionsBar,
+    private val versionBar: VersionBar,
+    private val filterBar: FilterBar,
+    private val multiReportPropertiesBar: MultiReportPropertiesBar,
+    private val descriptionBar: ReportDescriptionBar,
+    private val reportsSelectionEvent: Event<ReportsSelectionEvent>
+) : UI() {
 
   private val reportsRefresh = ReportsRefreshEvent()
   internal val table = Grid<Report>(Report::class.java)
   internal val split = VerticalSplitPanel()
-
-  @Inject
-  constructor(applicationModel: ApplicationModel,
-              projectSelectorBar: ProjectSelectorBar,
-              actionsBar: ActionsBar,
-              versionBar: VersionBar,
-              filterBar: FilterBar,
-              propertiesBar: PropertiesBar,
-              descriptionBar: ReportDescriptionBar,
-              reportsSelectionEvent: Event<ReportsSelectionEvent>) : this() {
-
-    this.applicationModel = applicationModel
-    this.projectSelectorBar = projectSelectorBar
-    this.actionsBar = actionsBar
-    this.versionBar = versionBar
-    this.filterBar = filterBar
-    this.propertiesBar = propertiesBar
-    this.descriptionBar = descriptionBar
-    this.reportsSelectionEvent = reportsSelectionEvent
-  }
 
   override fun init(vaadinRequest: VaadinRequest) {
     table.apply {
@@ -96,7 +76,7 @@ class ReportsOverviewUI() : UI() {
         }
       }
 
-      addShortcutListener(newShortcutListener("Enter", KeyCode.ENTER, intArrayOf()) { sender, target ->
+      addShortcutListener(newShortcutListener("Enter", KeyCode.ENTER, intArrayOf()) { _, target ->
         if (target is Grid<*> && target.selectedItems.size >= 1) {
           page.open(ExternalResource(CONTEXT_ROOT + (target as Grid<Report>).selectedItems.last().id),
               NEW_WINDOW, false)
@@ -109,7 +89,7 @@ class ReportsOverviewUI() : UI() {
     split.apply {
       firstComponent = table
       secondComponent = VerticalLayout().apply {
-        addComponents(propertiesBar, descriptionBar)
+        addComponents(multiReportPropertiesBar, descriptionBar)
         addStyleName(SMALL_TOP_MARGIN)
         setExpandRatio(descriptionBar, 1f)
         setMargin(false)

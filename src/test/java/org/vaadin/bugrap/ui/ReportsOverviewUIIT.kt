@@ -45,7 +45,7 @@ class ReportsOverviewUIIT : TestBenchTestCase() {
 //    System.setProperty("phantomjs.ghostdriver.path", "")
 //    System.setProperty("phantomjs.binary.path", "")
 //    setDriver(TestBench.createDriver(PhantomJSDriver(DesiredCapabilities.phantomjs())))
-    driver.get("http://localhost:8080/")
+    driver.get("http://localhost:8080/home")
   }
 
   @After

@@ -9,7 +9,7 @@ import com.vaadin.ui.VerticalLayout
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
 import org.vaadin.bugrap.domain.entities.Report
-import org.vaadin.bugrap.ui.reportdetail.BasePropertiesBar
+import org.vaadin.bugrap.ui.reportdetail.SingleReportPropertiesBar
 import javax.inject.Inject
 import javax.persistence.NoResultException
 
@@ -21,12 +21,12 @@ import javax.persistence.NoResultException
 @Theme("mytheme")
 class ReportDetailUI() : UI() {
 
-  private lateinit var propertiesBar: BasePropertiesBar
+  private lateinit var propertiesBar: SingleReportPropertiesBar
 
   val breadcrumb = Label()
 
   @Inject
-  constructor(applicationModel: ApplicationModel, propertiesBar: BasePropertiesBar) : this() {
+  constructor(applicationModel: ApplicationModel, propertiesBar: SingleReportPropertiesBar) : this() {
     this.propertiesBar = propertiesBar
   }
 
@@ -48,7 +48,7 @@ class ReportDetailUI() : UI() {
   }
 
   private fun fetchReport(idParam: String) : Report {
-    if (idParam == null || idParam.isEmpty()) {
+    if (idParam.isEmpty()) {
       throw IllegalArgumentException("Please specify the ID of the report to show.")
     }
 

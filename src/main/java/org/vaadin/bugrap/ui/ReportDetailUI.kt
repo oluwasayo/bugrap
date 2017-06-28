@@ -5,10 +5,13 @@ import com.vaadin.cdi.CDIUI
 import com.vaadin.server.VaadinRequest
 import com.vaadin.ui.Label
 import com.vaadin.ui.UI
+import com.vaadin.ui.VerticalLayout
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
+import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.ui.reportdetail.BasePropertiesBar
 import javax.inject.Inject
+import javax.persistence.NoResultException
 
 /**
  *
@@ -28,10 +31,38 @@ class ReportDetailUI() : UI() {
   }
 
   override fun init(request: VaadinRequest) {
-    val report = bugrapRepository.getReportById(request.getParameter("id").first().toLong())
+    val report = try {
+      fetchReport(request.getParameter("id"))
+    } catch (ex: Exception) {
+      content = VerticalLayout().apply {
+        addComponent(Label(ex.message))
+      }
+
+      return
+    }
+
     propertiesBar.setSelectedReports(setOf(report))
 
     content = propertiesBar
     page.setTitle("Bugrap - ${report.summary}")
+  }
+
+  private fun fetchReport(idParam: String) : Report {
+    if (idParam == null || idParam.isEmpty()) {
+      throw IllegalArgumentException("Please specify the ID of the report to show.")
+    }
+
+    val reportId = try {
+      idParam.toLong()
+    } catch (ex: NumberFormatException) {
+      throw IllegalArgumentException("Invalid report ID. Please specify a numeric value.", ex)
+    }
+
+    val report = bugrapRepository.getReportById(reportId)
+    if (report == null) {
+      throw NoResultException("Report ${reportId} not found. Please double-check.")
+    }
+
+    return report
   }
 }

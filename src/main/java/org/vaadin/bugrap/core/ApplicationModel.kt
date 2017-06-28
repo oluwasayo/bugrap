@@ -1,5 +1,12 @@
 package org.vaadin.bugrap.core
 
+import org.vaadin.bugrap.cdi.events.FilterChangeEvent
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
+import org.vaadin.bugrap.cdi.events.ReportsUpdateEvent
+import org.vaadin.bugrap.cdi.events.SearchEvent
+import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import org.vaadin.bugrap.domain.BugrapRepository
 import org.vaadin.bugrap.domain.BugrapRepository.ReportsQuery
 import org.vaadin.bugrap.domain.RepositorySearchFacade
@@ -7,12 +14,6 @@ import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.cdi.events.FilterChangeEvent
-import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
-import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
-import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
-import org.vaadin.bugrap.cdi.events.SearchEvent
-import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import java.io.File
 import java.io.Serializable
 import javax.annotation.PostConstruct
@@ -86,6 +87,12 @@ class ApplicationModel() : Serializable {
     reports = bugrapRepository.findReports(query)
     selectedReports.clear()
     if (fireEvent) reportsRefreshEvent.fire(ReportsRefreshEvent())
+  }
+
+  fun refreshReports(@Observes event: ReportsUpdateEvent) {
+    if (event.reports.intersect(getReports()).isNotEmpty()) {
+      refreshReports()
+    }
   }
 
   fun searchReports(@Observes event: SearchEvent) {

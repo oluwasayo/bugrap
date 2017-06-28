@@ -115,13 +115,13 @@ class BasePropertiesBar() : CustomComponent() {
     setSizeUndefined()
   }
 
-  fun setSelectedReports(reports: Set<Report>) {
+  fun setSelectedReports(reports: Set<Report>, updateControls: Boolean = true) {
     synchronized(selectedReports) {
       selectedReports.clear()
       selectedReports.addAll(reports)
     }
 
-    refreshControls(ReportsUpdateEvent(reports))
+    if (updateControls) refreshControls(ReportsUpdateEvent(reports))
   }
 
   protected fun refreshControls(@Observes event: ReportsUpdateEvent) {
@@ -148,6 +148,7 @@ class BasePropertiesBar() : CustomComponent() {
       bugrapRepository.save(this)
     }
 
+    setSelectedReports(setOf(bugrapRepository.getReportById(selectedReports.first().id)))
     reportsUpdateEvent.fire(ReportsUpdateEvent(selectedReports))
   }
 }

@@ -7,6 +7,8 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.vaadin.server.ExternalResource
 import org.junit.Before
 import org.junit.Test
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.CONTEXT_ROOT
 import org.vaadin.bugrap.core.Clock.Companion.currentTimeAsDate
@@ -21,8 +23,6 @@ import org.vaadin.bugrap.domain.entities.Report.Status.FIXED
 import org.vaadin.bugrap.domain.entities.Report.Status.WONT_FIX
 import org.vaadin.bugrap.domain.entities.Report.Type.BUG
 import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
-import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -86,7 +86,7 @@ class PropertiesBarTest {
     assertEquals(report.summary, sut.newWindowLink.caption)
 
     println("  -> Verify open in new window link points to the right resource")
-    assertEquals(CONTEXT_ROOT + report.id, (sut.newWindowLink.resource as ExternalResource).url)
+    assertEquals(CONTEXT_ROOT + "detail?id=" + report.id, (sut.newWindowLink.resource as ExternalResource).url)
 
     println("  -> Verify report detail label is invisible")
     assertFalse(sut.reportDetailLabel.isVisible)

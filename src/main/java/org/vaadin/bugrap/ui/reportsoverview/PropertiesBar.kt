@@ -161,7 +161,7 @@ class PropertiesBar() : CustomComponent() {
 
     if (!event.selectedReports.isEmpty()) {
       newWindowLink.caption = event.selectedReports.first().summary
-      newWindowLink.resource = ExternalResource(CONTEXT_ROOT + event.selectedReports.first().id)
+      newWindowLink.resource = ExternalResource(CONTEXT_ROOT + "detail?id=" + event.selectedReports.first().id)
 
       event.selectedReports.map { it.priority }.distinct().apply {
         priorityControl.setSelectedItem(if (count() == 1) first() else null)

@@ -21,8 +21,8 @@ import org.vaadin.bugrap.domain.entities.Report.Status.FIXED
 import org.vaadin.bugrap.domain.entities.Report.Status.WONT_FIX
 import org.vaadin.bugrap.domain.entities.Report.Type.BUG
 import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.ReportsSelectionEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date

@@ -16,7 +16,7 @@ import org.vaadin.bugrap.core.LOGOUT
 import org.vaadin.bugrap.core.ROUNDED_EAST
 import org.vaadin.bugrap.core.ROUNDED_WEST
 import org.vaadin.bugrap.domain.entities.Project
-import org.vaadin.bugrap.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event

@@ -19,7 +19,7 @@
 
   <servlet>
     <servlet-name>CDI Servlet</servlet-name>
-    <servlet-class>org.vaadin.bugrap.cdi.MVaadinCDIServlet</servlet-class>
+    <servlet-class>org.vaadin.bugrap.cdi.jettybootstrap.MVaadinCDIServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>

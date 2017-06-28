@@ -256,6 +256,7 @@
             <option>all-open:annotation=javax.enterprise.context.RequestScoped</option>
             <option>all-open:annotation=javax.enterprise.context.SessionScoped</option>
             <option>all-open:annotation=com.vaadin.cdi.CDIUI</option>
+            <option>all-open:annotation=org.vaadin.bugrap.cdi.Proxyable</option>
           </pluginOptions>
         </configuration>
 

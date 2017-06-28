@@ -1,4 +1,4 @@
-package org.vaadin.bugrap
+package org.vaadin.bugrap.ui
 
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
@@ -28,8 +28,8 @@ import org.vaadin.bugrap.domain.entities.Report.Status.FIXED
 import org.vaadin.bugrap.domain.entities.Report.Status.WONT_FIX
 import org.vaadin.bugrap.domain.entities.Report.Type.BUG
 import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.ReportsSelectionEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.ui.reportsoverview.ActionsBar
 import org.vaadin.bugrap.ui.reportsoverview.FilterBar
 import org.vaadin.bugrap.ui.reportsoverview.ProjectSelectorBar

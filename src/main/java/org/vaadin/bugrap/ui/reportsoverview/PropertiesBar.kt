@@ -36,8 +36,8 @@ import org.vaadin.bugrap.domain.entities.Report.Priority
 import org.vaadin.bugrap.domain.entities.Report.Status
 import org.vaadin.bugrap.domain.entities.Report.Type
 import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.ReportsSelectionEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event

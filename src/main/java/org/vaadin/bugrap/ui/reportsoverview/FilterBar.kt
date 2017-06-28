@@ -23,7 +23,7 @@ import org.vaadin.bugrap.core.ROUNDED_EAST
 import org.vaadin.bugrap.core.ROUNDED_WEST
 import org.vaadin.bugrap.core.STATUS
 import org.vaadin.bugrap.domain.entities.Report.Status
-import org.vaadin.bugrap.events.FilterChangeEvent
+import org.vaadin.bugrap.cdi.events.FilterChangeEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event

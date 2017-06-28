@@ -1,4 +1,4 @@
-package org.vaadin.bugrap
+package org.vaadin.bugrap.ui
 
 import com.vaadin.annotations.Theme
 import com.vaadin.cdi.CDIUI
@@ -14,6 +14,8 @@ import com.vaadin.ui.Grid.SelectionMode.MULTI
 import com.vaadin.ui.UI
 import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.VerticalSplitPanel
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.core.ASSIGNEE_COLUMN
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.CONTEXT_ROOT
@@ -26,8 +28,6 @@ import org.vaadin.bugrap.core.STATUS_COLUMN
 import org.vaadin.bugrap.core.ShortcutListenerFactory.newShortcutListener
 import org.vaadin.bugrap.core.VERSION
 import org.vaadin.bugrap.domain.entities.Report
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.ReportsSelectionEvent
 import org.vaadin.bugrap.ui.reportsoverview.ActionsBar
 import org.vaadin.bugrap.ui.reportsoverview.FilterBar
 import org.vaadin.bugrap.ui.reportsoverview.HorizontalRule
@@ -43,7 +43,7 @@ import javax.inject.Inject
  *
  * @author oladeji
  */
-@CDIUI("")
+@CDIUI("home")
 @Theme("mytheme")
 class ReportsOverviewUI() : UI() {
 

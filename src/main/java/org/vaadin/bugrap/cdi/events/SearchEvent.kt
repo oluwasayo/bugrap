@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.events
+package org.vaadin.bugrap.cdi.events
 
 /**
  *

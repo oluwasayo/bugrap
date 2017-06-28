@@ -20,8 +20,8 @@ import org.vaadin.bugrap.core.REPORT_FOR
 import org.vaadin.bugrap.core.ROUNDED_EAST
 import org.vaadin.bugrap.core.ROUNDED_WEST
 import org.vaadin.bugrap.domain.entities.ProjectVersion
-import org.vaadin.bugrap.events.ProjectChangeEvent
-import org.vaadin.bugrap.events.VersionChangeEvent
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event

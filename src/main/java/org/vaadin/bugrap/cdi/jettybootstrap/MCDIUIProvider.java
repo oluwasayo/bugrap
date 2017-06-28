@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.cdi;
+package org.vaadin.bugrap.cdi.jettybootstrap;
 
 import com.vaadin.cdi.CDIUIProvider;
 

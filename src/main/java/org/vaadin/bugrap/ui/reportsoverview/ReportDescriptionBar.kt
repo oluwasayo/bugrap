@@ -15,8 +15,8 @@ import org.vaadin.bugrap.core.LABEL_GRAY_TEXT
 import org.vaadin.bugrap.core.SMALL_TOP_MARGIN
 import org.vaadin.bugrap.core.TOP_BORDER
 import org.vaadin.bugrap.core.WIDE_TEXTAREA
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.ReportsSelectionEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import java.util.Date
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped

@@ -21,9 +21,9 @@ import org.vaadin.bugrap.domain.BugrapRepository
 import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
-import org.vaadin.bugrap.events.ProjectChangeEvent
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.VersionChangeEvent
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import java.util.stream.Collectors.toSet
 import javax.enterprise.event.Event
 import kotlin.test.assertEquals

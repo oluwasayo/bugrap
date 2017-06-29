@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.ui
+package org.vaadin.bugrap.ui.root
 
 import com.vaadin.annotations.Theme
 import com.vaadin.cdi.CDIUI
@@ -33,7 +33,7 @@ import org.vaadin.bugrap.ui.reportsoverview.FilterBar
 import org.vaadin.bugrap.ui.reportsoverview.HorizontalRule
 import org.vaadin.bugrap.ui.reportsoverview.MultiReportPropertiesBar
 import org.vaadin.bugrap.ui.reportsoverview.ProjectSelectorBar
-import org.vaadin.bugrap.ui.reportsoverview.ReportDescriptionBar
+import org.vaadin.bugrap.ui.reportsoverview.OverviewDescriptionBar
 import org.vaadin.bugrap.ui.reportsoverview.VersionBar
 import javax.enterprise.event.Event
 import javax.enterprise.event.Observes
@@ -52,7 +52,7 @@ class ReportsOverviewUI @Inject constructor(
     private val versionBar: VersionBar,
     private val filterBar: FilterBar,
     private val multiReportPropertiesBar: MultiReportPropertiesBar,
-    private val descriptionBar: ReportDescriptionBar,
+    private val descriptionBar: OverviewDescriptionBar,
     private val reportsSelectionEvent: Event<ReportsSelectionEvent>
 ) : UI() {
 

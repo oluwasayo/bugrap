@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.ui
+package org.vaadin.bugrap.ui.root
 
 import com.vaadin.testbench.TestBenchTestCase
 import com.vaadin.testbench.elements.ButtonElement

@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.ui.reportdetail
+package org.vaadin.bugrap.ui.shared
 
 import com.vaadin.server.Sizeable.Unit.MM
 import com.vaadin.server.Sizeable.Unit.PERCENTAGE

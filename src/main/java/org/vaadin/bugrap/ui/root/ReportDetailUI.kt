@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.ui
+package org.vaadin.bugrap.ui.root
 
 import com.vaadin.annotations.Theme
 import com.vaadin.cdi.CDIUI
@@ -8,6 +8,7 @@ import com.vaadin.ui.UI
 import com.vaadin.ui.VerticalLayout
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
+import org.vaadin.bugrap.core.WHITE_BACKGROUND
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.ui.reportdetail.SingleReportPropertiesBar
 import javax.inject.Inject
@@ -41,9 +42,15 @@ class ReportDetailUI() : UI() {
       return
     }
 
+    breadcrumb.addStyleName(WHITE_BACKGROUND)
+    breadcrumb.value = "${report.project.name}  >  ${report.version?.version ?: "No version"}"
+
     propertiesBar.setSelectedReports(setOf(report))
 
-    content = propertiesBar
+    content = VerticalLayout().apply {
+      addComponents(propertiesBar)
+    }
+
     page.setTitle("Bugrap - ${report.summary}")
   }
 

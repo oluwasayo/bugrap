@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.ui.reportdetail
+package org.vaadin.bugrap.ui.shared
 
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doNothing
@@ -14,7 +14,6 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.vaadin.bugrap.cdi.events.ReportsUpdateEvent
 import org.vaadin.bugrap.core.ApplicationModel
-import org.vaadin.bugrap.core.Clock
 import org.vaadin.bugrap.core.verifyObserver
 import org.vaadin.bugrap.domain.BugrapRepository
 import org.vaadin.bugrap.domain.entities.Project
@@ -22,11 +21,10 @@ import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.domain.entities.Report.Priority.BLOCKER
 import org.vaadin.bugrap.domain.entities.Report.Priority.CRITICAL
-import org.vaadin.bugrap.domain.entities.Report.Status.FIXED
 import org.vaadin.bugrap.domain.entities.Report.Status.INVALID
-import org.vaadin.bugrap.domain.entities.Report.Status.WONT_FIX
-import org.vaadin.bugrap.domain.entities.Report.Type.BUG
-import org.vaadin.bugrap.domain.entities.Reporter
+import org.vaadin.bugrap.ui.reportdetail.SingleReportPropertiesBar
+import org.vaadin.bugrap.ui.report1
+import org.vaadin.bugrap.ui.report2
 import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.fail
@@ -39,44 +37,6 @@ class AbstractPropertiesBarTest {
   private lateinit var sut: AbstractPropertiesBar
 
   companion object {
-
-    val report1 = Report().apply {
-      id = 1
-      assigned = Reporter()
-      author = assigned
-      description = "My fancy report"
-      occursIn = ProjectVersion().apply {
-        id = 1
-        version = "Version 1"
-      }
-      priority = BLOCKER
-      project = Project()
-      reportedTimestamp = Clock.currentTimeAsDate()
-      status = FIXED
-      summary = "Broken login button"
-      timestamp = reportedTimestamp
-      type = BUG
-      version = occursIn
-    }
-
-    val report2 = Report().apply {
-      id = 2
-      assigned = Reporter()
-      author = assigned
-      description = "My fancy report"
-      occursIn = ProjectVersion().apply {
-        id = 2
-        version = "Version 2"
-      }
-      priority = BLOCKER
-      project = Project()
-      reportedTimestamp = Clock.currentTimeAsDate()
-      status = WONT_FIX
-      summary = "Broken login button"
-      timestamp = reportedTimestamp
-      type = BUG
-      version = occursIn
-    }
 
     @BeforeClass
     @JvmStatic

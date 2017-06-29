@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.ui.reportsoverview
+package org.vaadin.bugrap.ui.shared
 
 import com.vaadin.icons.VaadinIcons.USER
 import com.vaadin.server.Sizeable.Unit.PERCENTAGE
@@ -9,29 +9,32 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Label
 import com.vaadin.ui.TextArea
 import com.vaadin.ui.VerticalLayout
-import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
-import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
-import org.vaadin.bugrap.core.ApplicationModel
-import org.vaadin.bugrap.core.Clock.Companion.currentTimeAsDate
+import org.vaadin.bugrap.cdi.Proxyable
+import org.vaadin.bugrap.core.Clock
 import org.vaadin.bugrap.core.LABEL_GRAY_TEXT
 import org.vaadin.bugrap.core.SMALL_TOP_MARGIN
 import org.vaadin.bugrap.core.TOP_BORDER
 import org.vaadin.bugrap.core.WIDE_TEXTAREA
+import org.vaadin.bugrap.domain.entities.Report
 import java.util.Date
 import javax.annotation.PostConstruct
-import javax.enterprise.context.SessionScoped
-import javax.enterprise.event.Observes
 import javax.inject.Inject
 
 /**
  *
  * @author oladeji
  */
-@SessionScoped
-class ReportDescriptionBar @Inject constructor(private val applicationModel: ApplicationModel) : CustomComponent() {
+@Proxyable
+abstract class AbstractDescriptionBar @Inject constructor() : CustomComponent() {
 
   internal val infoLabel = Label()
   internal val descriptionArea = TextArea()
+
+  internal var report: Report = Report()
+    set(value) {
+      field = value
+      updateUI()
+    }
 
   @PostConstruct
   fun setup() {
@@ -68,25 +71,16 @@ class ReportDescriptionBar @Inject constructor(private val applicationModel: App
     isVisible = false
   }
 
-  fun updateUI(@Observes event: ReportsSelectionEvent) {
-    isVisible = event.selectedReports.size == 1
-
-    if (isVisible) {
-      val report = event.selectedReports.first()
-      val name = report.author?.name ?: "Unknown Reporter"
-      infoLabel.value = "$name (${userFriendlyTimeDiff(report.reportedTimestamp)})"
-      descriptionArea.value = report.description
-    }
-  }
-
-  fun updateUI(@Observes event: ReportsRefreshEvent) {
-    isVisible = applicationModel.getSelectedReports().size == 1
+  fun updateUI() {
+    val name = report.author?.name ?: "Unknown Reporter"
+    infoLabel.value = "$name (${userFriendlyTimeDiff(report.reportedTimestamp)})"
+    descriptionArea.value = report.description
   }
 
   companion object {
 
     fun userFriendlyTimeDiff(date: Date): String {
-      val diff = currentTimeAsDate().time - date.time
+      val diff = Clock.currentTimeAsDate().time - date.time
       var result = when(diff) {
         in 0..4_999 -> "Just now"
         in 5_000..59_999 -> "${diff / 1_000} seconds ago"

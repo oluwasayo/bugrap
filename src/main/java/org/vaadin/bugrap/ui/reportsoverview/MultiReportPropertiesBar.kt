@@ -14,7 +14,7 @@ import org.vaadin.bugrap.core.LABEL_GRAY_TEXT
 import org.vaadin.bugrap.core.NEW_WINDOW
 import org.vaadin.bugrap.core.SELECT_A_SINGLE_REPORT
 import org.vaadin.bugrap.domain.entities.Report
-import org.vaadin.bugrap.ui.reportdetail.AbstractPropertiesBar
+import org.vaadin.bugrap.ui.shared.AbstractPropertiesBar
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event

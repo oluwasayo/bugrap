@@ -11,16 +11,10 @@ import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
 import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.cdi.events.ReportsUpdateEvent
 import org.vaadin.bugrap.core.CONTEXT_ROOT
-import org.vaadin.bugrap.core.Clock.Companion.currentTimeAsDate
 import org.vaadin.bugrap.core.verifyObserver
-import org.vaadin.bugrap.domain.entities.Project
-import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
-import org.vaadin.bugrap.domain.entities.Report.Priority.BLOCKER
-import org.vaadin.bugrap.domain.entities.Report.Status.FIXED
-import org.vaadin.bugrap.domain.entities.Report.Status.WONT_FIX
-import org.vaadin.bugrap.domain.entities.Report.Type.BUG
-import org.vaadin.bugrap.domain.entities.Reporter
+import org.vaadin.bugrap.ui.report1
+import org.vaadin.bugrap.ui.report2
 import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -54,22 +48,7 @@ class MultiReportPropertiesBarTest {
   fun updateProperties_reportsSelectionEvent_singleSelection() {
     println("updateProperties_reportsSelectionEvent_singleSelection")
 
-    val report = Report().apply {
-      assigned = Reporter()
-      author = assigned
-      description = "My fancy report"
-      occursIn = ProjectVersion()
-      priority = BLOCKER
-      project = Project()
-      reportedTimestamp = currentTimeAsDate()
-      status = FIXED
-      summary = "Broken login button"
-      timestamp = reportedTimestamp
-      type = BUG
-      version = occursIn
-    }
-
-    sut.updateProperties(ReportsSelectionEvent(setOf(report)))
+    sut.updateProperties(ReportsSelectionEvent(setOf(report1)))
 
     println("  -> Verify is visible")
     assertTrue(sut.isVisible)
@@ -78,10 +57,10 @@ class MultiReportPropertiesBarTest {
     assertTrue(sut.newWindowLink.isVisible)
 
     println("  -> Verify open in new window link has the selected report's summary as caption")
-    assertEquals(report.summary, sut.newWindowLink.caption)
+    assertEquals(report1.summary, sut.newWindowLink.caption)
 
     println("  -> Verify open in new window link points to the right resource")
-    assertEquals(CONTEXT_ROOT + "detail?id=" + report.id, (sut.newWindowLink.resource as ExternalResource).url)
+    assertEquals(CONTEXT_ROOT + "detail?id=" + report1.id, (sut.newWindowLink.resource as ExternalResource).url)
 
     println("  -> Verify report detail label is invisible")
     assertFalse(sut.reportDetailLabel.isVisible)
@@ -90,48 +69,16 @@ class MultiReportPropertiesBarTest {
     assertFalse(sut.fixedTextLabel.isVisible)
 
     println("  -> Verify controls are initialized to the report values")
-    assertEquals(report.priority, sut.priorityControl.selectedItem.get())
-    assertEquals(report.type, sut.typeControl.selectedItem.get())
-    assertEquals(report.status, sut.statusControl.selectedItem.get())
-    assertEquals(report.assigned, sut.assigneeControl.selectedItem.get())
-    assertEquals(report.version, sut.versionControl.selectedItem.get())
+    assertEquals(report1.priority, sut.priorityControl.selectedItem.get())
+    assertEquals(report1.type, sut.typeControl.selectedItem.get())
+    assertEquals(report1.status, sut.statusControl.selectedItem.get())
+    assertEquals(report1.assigned, sut.assigneeControl.selectedItem.get())
+    assertEquals(report1.version, sut.versionControl.selectedItem.get())
   }
 
   @Test
   fun updateProperties_reportsSelectionEvent_multipleSelection() {
     println("updateProperties_reportsSelectionEvent_multipleSelection")
-
-    val report1 = Report().apply {
-      id = 1
-      assigned = Reporter()
-      author = assigned
-      description = "My fancy report"
-      occursIn = ProjectVersion().apply { id = 1 }
-      priority = BLOCKER
-      project = Project()
-      reportedTimestamp = currentTimeAsDate()
-      status = FIXED
-      summary = "Broken login button"
-      timestamp = reportedTimestamp
-      type = BUG
-      version = occursIn
-    }
-
-    val report2 = Report().apply {
-      id = 2
-      assigned = Reporter()
-      author = assigned
-      description = "My fancy report"
-      occursIn = ProjectVersion().apply { id = 2 }
-      priority = BLOCKER
-      project = Project()
-      reportedTimestamp = currentTimeAsDate()
-      status = WONT_FIX
-      summary = "Broken login button"
-      timestamp = reportedTimestamp
-      type = BUG
-      version = occursIn
-    }
 
     sut.updateProperties(ReportsSelectionEvent(setOf(report1, report2)))
 

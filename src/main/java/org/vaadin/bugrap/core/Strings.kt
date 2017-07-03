@@ -54,6 +54,10 @@ const val UPDATE = "Update"
 const val REVERT = "Revert"
 
 const val SELECT_A_SINGLE_REPORT = "- Select a single report to view contents"
+const val UNKNOWN_REPORTER = "Unknown Reporter"
+const val UNKNOWN_COMMENTER = "Unknown Commenter"
+const val NO_VERSION = "No version"
+const val REPORT_DETAIL_NO_ID_ERROR = "Please specify the ID of the report to show."
 
 const val ALIGN_BOTTOM = "align-bottom"
 

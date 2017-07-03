@@ -47,7 +47,7 @@ class ProjectSelectorBar @Inject constructor(private val applicationModel: Appli
       }
     }
 
-    val userLabel = Label("${USER.html} ${applicationModel.getUsername()}", HTML)
+    val userLabel = Label("${USER.html} ${applicationModel.getUser()}", HTML)
     val separator = Label(LINE_V.html, HTML)
     val logoutLabel = Label("${USER.html} ${LOGOUT}", HTML)
 

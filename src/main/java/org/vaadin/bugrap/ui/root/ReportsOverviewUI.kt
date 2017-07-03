@@ -32,8 +32,8 @@ import org.vaadin.bugrap.ui.reportsoverview.ActionsBar
 import org.vaadin.bugrap.ui.reportsoverview.FilterBar
 import org.vaadin.bugrap.ui.reportsoverview.HorizontalRule
 import org.vaadin.bugrap.ui.reportsoverview.MultiReportPropertiesBar
-import org.vaadin.bugrap.ui.reportsoverview.ProjectSelectorBar
 import org.vaadin.bugrap.ui.reportsoverview.OverviewDescriptionBar
+import org.vaadin.bugrap.ui.reportsoverview.ProjectSelectorBar
 import org.vaadin.bugrap.ui.reportsoverview.VersionBar
 import javax.enterprise.event.Event
 import javax.enterprise.event.Observes
@@ -72,14 +72,14 @@ class ReportsOverviewUI @Inject constructor(
 
       addItemClickListener {
         if (it.mouseEventDetails.isDoubleClick) {
-          page.open(ExternalResource(CONTEXT_ROOT + it.item.id), NEW_WINDOW, false)
+          page.open(ExternalResource(CONTEXT_ROOT + "detail?id=" + it.item.id), NEW_WINDOW, false)
         }
       }
 
       addShortcutListener(newShortcutListener("Enter", KeyCode.ENTER, intArrayOf()) { _, target ->
         if (target is Grid<*> && target.selectedItems.size >= 1) {
-          page.open(ExternalResource(CONTEXT_ROOT + (target as Grid<Report>).selectedItems.last().id),
-              NEW_WINDOW, false)
+          page.open(ExternalResource(CONTEXT_ROOT + "detail?id="
+              + (target as Grid<Report>).selectedItems.last().id), NEW_WINDOW, false)
         }
       })
 
@@ -145,7 +145,7 @@ class ReportsOverviewUI @Inject constructor(
         split.isLocked = true
       }
       1 -> {
-        split.setSplitPosition(250f, PIXELS, true)
+        split.setSplitPosition(287f, PIXELS, true)
         split.isLocked = false
       }
       else -> {

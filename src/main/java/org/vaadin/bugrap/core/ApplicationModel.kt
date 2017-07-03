@@ -52,7 +52,7 @@ class ApplicationModel() : Serializable {
   fun getSelectedReports() = selectedReports
 
   private var user: Reporter? = null
-  fun getUsername() = user
+  fun getUser() = user
 
   @Inject
   constructor(searchFacade: RepositorySearchFacade, filter: Filter, reportsRefreshEvent: Event<ReportsRefreshEvent>)

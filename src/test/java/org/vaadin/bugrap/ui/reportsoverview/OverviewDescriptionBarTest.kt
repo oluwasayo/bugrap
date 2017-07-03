@@ -12,6 +12,7 @@ import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.Clock
 import org.vaadin.bugrap.core.Filter
+import org.vaadin.bugrap.core.userFriendlyTimeDiff
 import org.vaadin.bugrap.core.verifyObserver
 import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Report
@@ -21,7 +22,6 @@ import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import org.vaadin.bugrap.ui.shared.AbstractDescriptionBar.Companion.userFriendlyTimeDiff as timeDiff
 
 /**
  * @author oladeji
@@ -66,13 +66,13 @@ class OverviewDescriptionBarTest {
     assertEquals(report1.description, sut.descriptionArea.value)
 
     println("  -> Verify \"Unknown Reporter\" shown along with time diff when reporter's name is unknown")
-    assertEquals("Unknown Reporter (${timeDiff(report1.reportedTimestamp)})",
+    assertEquals("Unknown Reporter (${userFriendlyTimeDiff(report1.reportedTimestamp)})",
         sut.infoLabel.value)
 
     println("  -> Verify reporter's name shown along with time diff when reporter's name is known")
     report1.author.name = "Sayo Oladeji"
     sut.updateUI(ReportsSelectionEvent(setOf(report1)))
-    assertEquals("Sayo Oladeji (${timeDiff(report1.reportedTimestamp)})",
+    assertEquals("Sayo Oladeji (${userFriendlyTimeDiff(report1.reportedTimestamp)})",
         sut.infoLabel.value)
   }
 

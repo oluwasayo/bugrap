@@ -12815,3 +12815,14 @@ div.v-layout.v-horizontal.v-widget {
 	-webkit-box-shadow: 0 0 0 2px rgba(25, 125, 225, 0.5);
 	box-shadow: 0 0 0 2px rgba(25, 125, 225, 0.5);
 }
+
+.mytheme .scrollable {
+	overflow: auto;
+	overflow-y: scroll;
+}
+
+.mytheme .wrap-line {
+	word-wrap: break-word;
+	white-space: -moz-pre-wrap;
+	white-space: pre-wrap;
+}

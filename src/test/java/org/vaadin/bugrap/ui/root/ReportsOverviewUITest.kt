@@ -159,7 +159,7 @@ class ReportsOverviewUITest {
     assertFalse(sut.split.isLocked)
 
     println("  -> Verify vertical split position reveals reports details when only one report is selected")
-    assertEquals(250f, sut.split.splitPosition)
+    assertEquals(287f, sut.split.splitPosition)
     assertEquals(PIXELS, sut.split.splitPositionUnit)
     assertTrue(sut.split.isSplitPositionReversed)
 

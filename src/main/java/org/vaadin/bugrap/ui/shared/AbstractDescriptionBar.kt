@@ -41,7 +41,6 @@ abstract class AbstractDescriptionBar() : CustomComponent() {
     infoLabel.addStyleName(LABEL_GRAY_TEXT)
     descriptionArea.addStyleName(WIDE_TEXTAREA)
     descriptionArea.setWidth(100f, PERCENTAGE)
-//    descriptionArea.rows
     descriptionArea.setHeight(92f, PERCENTAGE)
 
     val topBar = HorizontalLayout().apply {

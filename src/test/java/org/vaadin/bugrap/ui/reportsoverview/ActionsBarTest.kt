@@ -10,6 +10,10 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.SearchEvent
+import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.Filter
 import org.vaadin.bugrap.core.verifyObserver
@@ -17,10 +21,6 @@ import org.vaadin.bugrap.domain.BugrapRepository
 import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
-import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
-import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
-import org.vaadin.bugrap.cdi.events.SearchEvent
-import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 

@@ -33,10 +33,8 @@ class CommentBar(private val comment: Comment) : CustomComponent() {
     }
 
     val descriptionArea = Label().apply {
-//      addStyleName(WIDE_TEXTAREA)
       value = comment.comment
       addStyleName("wrap-line")
-//      removeStyleName("v-label-undef-w")
       setWidth(100f, PERCENTAGE)
     }
 

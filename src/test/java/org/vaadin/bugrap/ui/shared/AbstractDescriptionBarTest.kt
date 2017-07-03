@@ -56,5 +56,7 @@ class AbstractDescriptionBarTest {
     sut.updateUI()
     assertEquals("Sayo Oladeji (${userFriendlyTimeDiff(report1.reportedTimestamp)})",
         sut.infoLabel.value)
+
+    report1.author.name = null
   }
 }

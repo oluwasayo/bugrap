@@ -22,7 +22,6 @@ import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-
 /**
  * @author oladeji
  */
@@ -39,7 +38,10 @@ class OverviewDescriptionBarTest {
   }
 
   @After
-  fun cleanup() = Clock.unfreeze()
+  fun cleanup() {
+    report1.author.name = null
+    Clock.unfreeze()
+  }
 
   @Test
   fun updateUI_reportsSelectionEvent() {

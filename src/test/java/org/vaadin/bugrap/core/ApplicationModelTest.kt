@@ -15,6 +15,7 @@ import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
@@ -33,6 +34,8 @@ import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.domain.entities.Report.Status
 import org.vaadin.bugrap.domain.entities.Reporter
+import org.vaadin.bugrap.ui.report1
+import org.vaadin.bugrap.ui.report2
 import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -50,8 +53,6 @@ class ApplicationModelTest {
   companion object {
     private val projectA = Project().apply { name = "A" }
     private val projectB = Project().apply { name = "B" }
-    private val report1 = Report().apply { id = 1 }
-    private val report2 = Report().apply { id = 2 }
 
     @BeforeClass
     @JvmStatic
@@ -74,6 +75,9 @@ class ApplicationModelTest {
     sut.setup()
     reset(sut)
   }
+
+  @After
+  fun cleanup() = report1.author.setName(null)
 
   @Test
   fun setup() {

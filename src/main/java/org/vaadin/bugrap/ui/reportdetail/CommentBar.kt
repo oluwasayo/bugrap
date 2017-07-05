@@ -15,6 +15,7 @@ import org.vaadin.bugrap.core.LABEL_GRAY_TEXT
 import org.vaadin.bugrap.core.SMALL_TOP_MARGIN
 import org.vaadin.bugrap.core.TOP_BORDER
 import org.vaadin.bugrap.core.UNKNOWN_COMMENTER
+import org.vaadin.bugrap.core.WRAP_LINE
 import org.vaadin.bugrap.core.userFriendlyTimeDiff
 import org.vaadin.bugrap.domain.entities.Comment
 
@@ -34,7 +35,7 @@ class CommentBar(private val comment: Comment) : CustomComponent() {
 
     val descriptionArea = Label().apply {
       value = comment.comment
-      addStyleName("wrap-line")
+      addStyleName(WRAP_LINE)
       setWidth(100f, PERCENTAGE)
     }
 
@@ -54,14 +55,14 @@ class CommentBar(private val comment: Comment) : CustomComponent() {
 
     compositionRoot = VerticalLayout().apply {
       val descriptionLayout = HorizontalLayout().apply {
-        val space = Label("&nbsp;&nbsp;").apply { contentMode = HTML }
+        val space = Label().apply { setWidth(17f, PIXELS) }
         addComponents(space, descriptionArea)
       }
 
       addComponents(topBar, descriptionLayout)
 
       if (comment.attachment != null && comment.attachment.isNotEmpty()) {
-        val space = Label().apply { setWidth(20f, PIXELS) }
+        val space = Label().apply { setWidth(17f, PIXELS) }
         val link = Link(comment.attachmentName, ExternalResource(CONTEXT_ROOT + "attachment/" + comment.id))
         addComponents(HorizontalLayout().apply { addComponents(space, link) })
       }

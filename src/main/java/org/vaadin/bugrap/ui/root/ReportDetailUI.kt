@@ -7,9 +7,11 @@ import com.vaadin.server.VaadinRequest
 import com.vaadin.shared.ui.MarginInfo
 import com.vaadin.ui.Button
 import com.vaadin.ui.HorizontalLayout
+import com.vaadin.ui.JavaScript
 import com.vaadin.ui.Label
 import com.vaadin.ui.TextArea
 import com.vaadin.ui.UI
+import com.vaadin.ui.Upload
 import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.themes.ValoTheme.BUTTON_DANGER
 import com.vaadin.ui.themes.ValoTheme.BUTTON_PRIMARY
@@ -20,8 +22,9 @@ import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
 import org.vaadin.bugrap.core.Clock.Companion.currentTimeAsDate
 import org.vaadin.bugrap.core.NO_VERSION
 import org.vaadin.bugrap.core.REPORT_DETAIL_NO_ID_ERROR
+import org.vaadin.bugrap.core.SCROLLABLE
 import org.vaadin.bugrap.core.SMALL_PADDING
-import org.vaadin.bugrap.core.WHITE_BACKGROUND
+import org.vaadin.bugrap.core.WRITE_A_COMMENT
 import org.vaadin.bugrap.domain.entities.Comment
 import org.vaadin.bugrap.domain.entities.Comment.Type.ATTACHMENT
 import org.vaadin.bugrap.domain.entities.Comment.Type.COMMENT
@@ -29,6 +32,9 @@ import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.ui.reportdetail.CommentBar
 import org.vaadin.bugrap.ui.reportdetail.DetailDescriptionBar
 import org.vaadin.bugrap.ui.reportdetail.SingleReportPropertiesBar
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import javax.enterprise.event.Observes
 import javax.inject.Inject
 import javax.persistence.NoResultException
@@ -46,9 +52,7 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
 
   private lateinit var report: Report
 
-  val breadcrumb = Label().apply {
-    addStyleName(WHITE_BACKGROUND)
-  }
+  val breadcrumb = Label()
 
   val commentsSection = VerticalLayout().apply {
     isSpacing = false
@@ -75,43 +79,58 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
 
     val contentContainer = VerticalLayout().apply {
       addComponents(descriptionBar, commentsSection)
-      addStyleName("scrollable")
+      addStyleName(SCROLLABLE)
       setHeight(100f, PERCENTAGE)
       setMargin(false)
     }
 
     content = VerticalLayout().apply {
       val newCommentArea = TextArea().apply {
-        placeholder = "Write a comment..."
+        placeholder = WRITE_A_COMMENT
         setWidth(100f, PERCENTAGE)
         setMargin(true)
         addStyleName(SMALL_PADDING)
       }
 
-      addComponents(breadcrumb, propertiesBar, contentContainer, newCommentArea, HorizontalLayout().apply {
-        addComponents(
-            Button("Done").apply {
-              addStyleName(BUTTON_TINY)
-              addStyleName(BUTTON_PRIMARY)
-              addClickListener {
-                val comment = saveComment(newCommentArea.value, ByteArray(0), "Screenshot")
-                commentsSection.addComponent(CommentBar(comment))
-                commentsSection.isVisible = true
-                newCommentArea.clear()
-              }
-            },
-            Button("Attachments...").apply {
-              addStyleName(BUTTON_TINY)
-            },
-            Button("Cancel").apply {
-              addStyleName(BUTTON_TINY)
-              addStyleName(BUTTON_DANGER)
-              addClickListener {
-                newCommentArea.clear()
-                updateUI()
-              }
-            })
-      })
+
+      val controlsBar = HorizontalLayout()
+
+      val doneButton = Button("Done").apply {
+        addStyleName(BUTTON_TINY)
+        addStyleName(BUTTON_PRIMARY)
+        addClickListener {
+          val comment = saveComment(newCommentArea.value, ByteArray(0), "Screenshot")
+          commentsSection.addComponent(CommentBar(comment))
+          commentsSection.isVisible = true
+          newCommentArea.clear()
+        }
+      }
+
+      val attachmentsButton = Button("Attachment...").apply {
+        addStyleName(BUTTON_TINY)
+        addClickListener {
+          val upload = Upload(null) { filename, mimeType ->
+            BufferedOutputStream(FileOutputStream(File(filename)))
+          }
+          controlsBar.addComponent(upload)
+          JavaScript.getCurrent().execute("document.getElementsByClassName('gwt-FileUpload')[0].click()")
+        }
+      }
+
+      val cancelButton = Button("Cancel").apply {
+        addStyleName(BUTTON_TINY)
+        addStyleName(BUTTON_DANGER)
+        addClickListener {
+          newCommentArea.clear()
+          updateUI()
+        }
+      }
+
+      controlsBar.apply {
+        addComponents(doneButton, attachmentsButton, cancelButton)
+      }
+
+      addComponents(breadcrumb, propertiesBar, contentContainer, newCommentArea, controlsBar)
 
       setExpandRatio(contentContainer, 1f)
       setSizeFull()
@@ -138,7 +157,7 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
     return bugrapRepository.save(comment)
   }
 
-  private fun fetchReport(idParam: String) : Report {
+  private fun fetchReport(idParam: String): Report {
     if (idParam.isEmpty()) {
       throw IllegalArgumentException(REPORT_DETAIL_NO_ID_ERROR)
     }

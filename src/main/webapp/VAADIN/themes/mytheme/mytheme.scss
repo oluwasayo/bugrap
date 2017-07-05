@@ -147,6 +147,11 @@
     @include valo-menubar-style($background-color: $v-selection-color, $unit-size: null);
   }
 
+  .v-upload {
+    display: none;
+    visibility: hidden;
+  }
+
   .scrollable {
     overflow: auto;
     overflow-y: scroll;

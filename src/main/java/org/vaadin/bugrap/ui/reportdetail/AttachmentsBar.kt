@@ -34,8 +34,8 @@ class AttachmentsBar : CustomComponent() {
 
   init {
     compositionRoot = container
-    updateUI()
     setSizeUndefined()
+    updateUI()
   }
 
   fun add(file: File, attachment: Attachment) {
@@ -56,14 +56,25 @@ class AttachmentsBar : CustomComponent() {
     val toAdd = attachments.filterNot { k -> keysInUI.map { (it as AttachmentComponent).file }.contains(k.key) }
 
     toRemove.forEach { container.removeComponent(it) }
-    toAdd.forEach { container.addComponent(AttachmentComponent(it.key, it.value)) }
+    toAdd.forEach { container.addComponent(AttachmentComponent(it.key, it.value, this)) }
     container.iterator().forEach { (it as AttachmentComponent).updateUI() }
 
     isVisible = attachments.isNotEmpty()
   }
+
+  fun removeAttachment(file: File) {
+    attachments.remove(file)
+    val widget = container.iterator().asSequence().filter { (it as AttachmentComponent).file == file }.first()
+    container.removeComponent(widget)
+    isVisible = attachments.isNotEmpty()
+  }
 }
 
-class AttachmentComponent(val file: File, private val attachment: Attachment) : CustomComponent() {
+class AttachmentComponent(
+    val file: File,
+    private val attachment: Attachment,
+    private val attachmentsBar: AttachmentsBar)
+  : CustomComponent() {
 
   val nameButton = Button(removeTimestampFromFileName(file.name))
   val cancelButton = Button(VaadinIcons.CLOSE_SMALL)
@@ -87,6 +98,8 @@ class AttachmentComponent(val file: File, private val attachment: Attachment) : 
       addStyleName(BUTTON_BORDERLESS)
       addStyleName(NO_VISUAL_FOCUS)
       addStyleName(NO_LEFT_PADDING)
+
+      addClickListener { attachmentsBar.removeAttachment(file) }
     }
 
     updateUI()

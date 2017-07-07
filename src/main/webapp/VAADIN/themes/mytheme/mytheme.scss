@@ -118,6 +118,10 @@
     padding: 10px;
   }
 
+  .no-left-padding {
+    padding-left: 0px !important;
+  }
+
   .top-border {
     border-top-color: #b9b9b9;
   }
@@ -161,5 +165,19 @@
     word-wrap: break-word; /* IE  */
     white-space: -moz-pre-wrap; /* Firefox */
     white-space: pre-wrap; /* Chrome */
+  }
+
+  .v-slot .v-slot-wrap-line {
+    max-width: 95%;
+  }
+
+  .attachment-bar :hover {
+    border-radius: 4px;
+    background: #5b5b5b;
+    color: white;
+  }
+
+  .no-visual-focus:after {
+    content: none;
   }
 }

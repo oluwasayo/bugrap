@@ -8,7 +8,7 @@ import java.util.Date
  */
 fun userFriendlyTimeDiff(date: Date): String {
   val diff = Clock.currentTimeAsDate().time - date.time
-  var result = when(diff) {
+  var result = when (diff) {
     in 0..4_999 -> "Just now"
     in 5_000..59_999 -> "${diff / 1_000} seconds ago"
     in 60_000..3_599_999 -> "${diff / 60_000} minutes ago"
@@ -21,6 +21,24 @@ fun userFriendlyTimeDiff(date: Date): String {
 
   if (result.startsWith("1 ")) { // Singularize.
     result = StringBuilder(result).deleteCharAt(result.length - 5).toString()
+  }
+
+  return result
+}
+
+fun addTimestampToFilename(fileName: String): String {
+  if (fileName.contains(".")) {
+    return fileName.substring(0, fileName.lastIndexOf(".")) + "_" + System.currentTimeMillis() +
+        fileName.substring(fileName.lastIndexOf("."))
+  }
+
+  return fileName + "_" + System.currentTimeMillis()
+}
+
+fun removeTimestampFromFileName(fileName: String): String {
+  var result = fileName.substring(0, fileName.lastIndexOf("_"))
+  if (fileName.contains(".")) {
+    result += fileName.substring(fileName.lastIndexOf("."))
   }
 
   return result

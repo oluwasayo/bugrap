@@ -36,7 +36,7 @@ class CommentBar(private val comment: Comment) : CustomComponent() {
     val descriptionArea = Label().apply {
       value = comment.comment
       addStyleName(WRAP_LINE)
-      setWidth(100f, PERCENTAGE)
+      setWidth(90f, PERCENTAGE)
     }
 
     val topBar = HorizontalLayout().apply {

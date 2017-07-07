@@ -67,5 +67,8 @@ const val ICON_AFTER_CAPTION = "icon-after-caption"
 
 const val WRAP_LINE = "wrap-line"
 const val SCROLLABLE = "scrollable"
+const val NO_VISUAL_FOCUS = "no-visual-focus"
+const val NO_LEFT_PADDING = "no-left-padding"
+const val ATTACHMENT_BAR = "attachment-bar"
 
 const val CONTEXT_ROOT = "http://localhost:8080/"

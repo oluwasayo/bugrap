@@ -50,6 +50,11 @@ class AttachmentsBar : CustomComponent() {
     updateUI()
   }
 
+  fun clear() {
+    attachments.clear()
+    updateUI()
+  }
+
   fun updateUI() {
     val keysInUI = container.iterator().asSequence().toSet()
     val toRemove = keysInUI.filterNot { attachments.containsKey((it as AttachmentComponent).file) }

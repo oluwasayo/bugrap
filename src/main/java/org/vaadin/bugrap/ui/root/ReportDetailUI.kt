@@ -38,8 +38,10 @@ import org.vaadin.bugrap.ui.reportdetail.AttachmentsBar
 import org.vaadin.bugrap.ui.reportdetail.CommentBar
 import org.vaadin.bugrap.ui.reportdetail.DetailDescriptionBar
 import org.vaadin.bugrap.ui.reportdetail.SingleReportPropertiesBar
+import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.PrintWriter
 import javax.enterprise.event.Observes
@@ -71,10 +73,7 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
     report = try {
       fetchReport(request.getParameter("id"))
     } catch (ex: Exception) {
-      content = VerticalLayout().apply {
-        addComponent(Label(ex.message))
-      }
-
+      content = VerticalLayout().apply { addComponent(Label(ex.message)) }
       return
     }
 
@@ -107,10 +106,21 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
         addStyleName(BUTTON_TINY)
         addStyleName(BUTTON_PRIMARY)
         addClickListener {
-          val comment = saveComment(newCommentArea.value, ByteArray(0), "Screenshot")
-          commentsSection.addComponent(CommentBar(comment))
-          commentsSection.isVisible = true
-          newCommentArea.clear()
+          if (!newCommentArea.isEmpty) {
+            val comment = saveComment(newCommentArea.value, ByteArray(0), null)
+            commentsSection.addComponent(CommentBar(comment))
+            newCommentArea.clear()
+          }
+
+          attachmentsBar.attachments.forEach {
+            val data = ByteArray(it.key.length().toInt())
+            BufferedInputStream(FileInputStream(it.key)).use { it.read(data) }
+            val comment = saveComment(null, data, it.key.name)
+            commentsSection.addComponent(CommentBar(comment))
+          }
+
+          attachmentsBar.clear()
+          commentsSection.isVisible = commentsSection.iterator().hasNext()
         }
       }
 
@@ -183,7 +193,7 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
     updateUI()
   }
 
-  private fun saveComment(text: String, attachment: ByteArray, attachmentName: String): Comment {
+  private fun saveComment(text: String?, attachment: ByteArray, attachmentName: String?): Comment {
     val comment = Comment().apply {
       if (attachment.isNotEmpty()) {
         this.attachment = attachment

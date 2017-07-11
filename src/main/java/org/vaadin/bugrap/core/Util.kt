@@ -36,6 +36,7 @@ fun addTimestampToFilename(fileName: String): String {
 }
 
 fun removeTimestampFromFileName(fileName: String): String {
+  if (!fileName.contains('_')) return fileName
   var result = fileName.substring(0, fileName.lastIndexOf("_"))
   if (fileName.contains(".")) {
     result += fileName.substring(fileName.lastIndexOf("."))

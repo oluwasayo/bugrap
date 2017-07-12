@@ -131,20 +131,29 @@ class ApplicationModel() : Serializable {
     init {
       // Horrible hack that allows me keep the web app running while clicking individual
       // test run in IDE without the two HSQL instances failing to acquire lock.
+      var dbExists = true
       try {
         dbDir = "${System.getProperty("user.home")}/.bugrap"
+        dbExists = File(dbDir).exists()
         bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
-        bugrapRepository.authenticate("developer", "developer")
+
+        if (!dbExists) {
+          println("Bugrap main DB not found in home directory. Generating test data...")
+          bugrapRepository.populateWithTestData()
+        }
       } catch (ex: Exception) {
         println("Main DB locked by another application instance. Falling back to test DB.")
         dbDir = "${System.getProperty("user.home")}/.bugrap_test"
+        dbExists = File(dbDir).exists()
         bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
+
+        if (!dbExists) {
+          println("Bugrap test DB not found in home directory. Generating test data...")
+          bugrapRepository.populateWithTestData()
+        }
       }
 
-      if (!File(dbDir).exists()) {
-        println("Bugrap DB not found in home directory. Generating test data...")
-        bugrapRepository.populateWithTestData()
-      }
+      bugrapRepository.authenticate("developer", "developer")
     }
   }
 }

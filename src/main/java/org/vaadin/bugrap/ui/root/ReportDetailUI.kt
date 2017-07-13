@@ -45,6 +45,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.PrintWriter
 import javax.enterprise.event.Observes
+import javax.enterprise.event.Reception
 import javax.inject.Inject
 import javax.persistence.NoResultException
 
@@ -229,7 +230,7 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
     return report
   }
 
-  fun updateUI(@Observes event: ReportsUpdateEvent) {
+  fun updateUI(@Observes(notifyObserver = Reception.IF_EXISTS) event: ReportsUpdateEvent) {
     if (event.reports.contains(report)) {
       report = event.reports.filter { it.id == report.id }.first()
     }

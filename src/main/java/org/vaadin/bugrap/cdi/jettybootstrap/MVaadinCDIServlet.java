@@ -1,4 +1,4 @@
-package org.vaadin.bugrap.cdi;
+package org.vaadin.bugrap.cdi.jettybootstrap;
 
 import com.vaadin.cdi.server.VaadinCDIServlet;
 import com.vaadin.server.DeploymentConfiguration;
@@ -11,8 +11,7 @@ public class MVaadinCDIServlet extends VaadinCDIServlet {
   protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration)
       throws ServiceException {
 
-    VaadinServletService service = new MVaadinCDIServletService(this,
-        deploymentConfiguration);
+    VaadinServletService service = new MVaadinCDIServletService(this, deploymentConfiguration);
     service.init();
     return service;
   }

@@ -1,4 +1,4 @@
-package org.vaadin.bugrap
+package org.vaadin.bugrap.ui.root
 
 import com.vaadin.testbench.TestBenchTestCase
 import com.vaadin.testbench.elements.ButtonElement
@@ -14,7 +14,9 @@ import com.vaadin.ui.themes.ValoTheme.BUTTON_PRIMARY
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.openqa.selenium.Dimension
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.vaadin.bugrap.core.ALL_KINDS
 import org.vaadin.bugrap.core.EVERYONE
 import org.vaadin.bugrap.core.MENUBAR_THEMED
@@ -38,14 +40,15 @@ class ReportsOverviewUIIT : TestBenchTestCase() {
   @Before
   fun setup() {
     System.setProperty("webdriver.chrome.driver", "src/test/resources/bin/chromedriver_2.24")
+
     setDriver(ChromeDriver())
-//    val chromeOptions = ChromeOptions().apply { addArguments("--start-maximized") }
-//    val theDriver = ChromeDriver(chromeOptions).apply { manage().window().maximize() }
-//    setDriver(theDriver)
+    getDriver().manage().window().size = Dimension(1600, 1024)
+
 //    System.setProperty("phantomjs.ghostdriver.path", "")
 //    System.setProperty("phantomjs.binary.path", "")
 //    setDriver(TestBench.createDriver(PhantomJSDriver(DesiredCapabilities.phantomjs())))
-    driver.get("http://localhost:8080/")
+
+    driver.get("http://localhost:8080/home")
   }
 
   @After

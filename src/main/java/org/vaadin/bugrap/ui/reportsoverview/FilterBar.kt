@@ -11,6 +11,7 @@ import com.vaadin.ui.themes.ValoTheme.BUTTON_PRIMARY
 import com.vaadin.ui.themes.ValoTheme.BUTTON_SMALL
 import com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP
 import com.vaadin.ui.themes.ValoTheme.MENUBAR_SMALL
+import org.vaadin.bugrap.cdi.events.FilterChangeEvent
 import org.vaadin.bugrap.core.ALL_KINDS
 import org.vaadin.bugrap.core.ASSIGNEES
 import org.vaadin.bugrap.core.CUSTOM
@@ -23,7 +24,6 @@ import org.vaadin.bugrap.core.ROUNDED_EAST
 import org.vaadin.bugrap.core.ROUNDED_WEST
 import org.vaadin.bugrap.core.STATUS
 import org.vaadin.bugrap.domain.entities.Report.Status
-import org.vaadin.bugrap.events.FilterChangeEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event
@@ -34,18 +34,11 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class FilterBar() : CustomComponent() {
-
-  private lateinit var filter: Filter
-  private lateinit var filterChangeEvent: Event<FilterChangeEvent>
+class FilterBar @Inject constructor(private val filter: Filter,
+                                    private val filterChangeEvent: Event<FilterChangeEvent>)
+  : CustomComponent() {
 
   internal val filterChange = FilterChangeEvent()
-
-  @Inject
-  constructor(filter: Filter, filterChangeEvent: Event<FilterChangeEvent>) : this() {
-    this.filter = filter
-    this.filterChangeEvent = filterChangeEvent
-  }
 
   @PostConstruct
   private fun setup() {

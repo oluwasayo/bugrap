@@ -1,4 +1,4 @@
-package org.vaadin.bugrap
+package org.vaadin.bugrap.ui.root
 
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
@@ -15,26 +15,21 @@ import com.vaadin.shared.data.sort.SortDirection
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
 import org.vaadin.bugrap.core.ApplicationModel
-import org.vaadin.bugrap.core.Clock
 import org.vaadin.bugrap.core.PRIORITY
 import org.vaadin.bugrap.core.VERSION
 import org.vaadin.bugrap.core.verifyObserver
-import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
-import org.vaadin.bugrap.domain.entities.Report.Priority.BLOCKER
-import org.vaadin.bugrap.domain.entities.Report.Status.FIXED
-import org.vaadin.bugrap.domain.entities.Report.Status.WONT_FIX
-import org.vaadin.bugrap.domain.entities.Report.Type.BUG
-import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.ReportsSelectionEvent
+import org.vaadin.bugrap.ui.report1
+import org.vaadin.bugrap.ui.report2
 import org.vaadin.bugrap.ui.reportsoverview.ActionsBar
 import org.vaadin.bugrap.ui.reportsoverview.FilterBar
+import org.vaadin.bugrap.ui.reportsoverview.MultiReportPropertiesBar
+import org.vaadin.bugrap.ui.reportsoverview.OverviewDescriptionBar
 import org.vaadin.bugrap.ui.reportsoverview.ProjectSelectorBar
-import org.vaadin.bugrap.ui.reportsoverview.PropertiesBar
-import org.vaadin.bugrap.ui.reportsoverview.ReportDescriptionBar
 import org.vaadin.bugrap.ui.reportsoverview.VersionBar
 import java.util.stream.Collectors.toSet
 import javax.enterprise.event.Event
@@ -49,38 +44,6 @@ import kotlin.test.assertTrue
  */
 class ReportsOverviewUITest {
 
-  private val report1 = Report().apply {
-    id = 1
-    assigned = Reporter()
-    author = assigned
-    description = "My fancy report"
-    occursIn = ProjectVersion().apply { id = 1 }
-    priority = BLOCKER
-    project = Project()
-    reportedTimestamp = Clock.currentTimeAsDate()
-    status = FIXED
-    summary = "Broken login button"
-    timestamp = reportedTimestamp
-    type = BUG
-    version = occursIn
-  }
-
-  private val report2 = Report().apply {
-    id = 2
-    assigned = Reporter()
-    author = assigned
-    description = "My fancy report"
-    occursIn = ProjectVersion().apply { id = 2 }
-    priority = BLOCKER
-    project = Project()
-    reportedTimestamp = Clock.currentTimeAsDate()
-    status = WONT_FIX
-    summary = "Broken login button"
-    timestamp = reportedTimestamp
-    type = BUG
-    version = occursIn
-  }
-
   private lateinit var appModel: ApplicationModel
   private lateinit var sut: ReportsOverviewUI
 
@@ -93,16 +56,14 @@ class ReportsOverviewUITest {
         mock<ActionsBar>(),
         mock<VersionBar>(),
         mock<FilterBar>(),
-        mock<PropertiesBar>(),
-        mock<ReportDescriptionBar>(),
+        mock<MultiReportPropertiesBar>(),
+        mock<OverviewDescriptionBar>(),
         mock<Event<ReportsSelectionEvent>>()
     ))
   }
 
   @After
-  fun cleanup() {
-    reset(appModel)
-  }
+  fun cleanup() = reset(appModel)
 
   @Test
   fun updateGrid_noVersionSelected() {
@@ -181,8 +142,6 @@ class ReportsOverviewUITest {
   fun updateSplit() {
     println("updateSplit")
 
-    val sut = spy<ReportsOverviewUI>()
-
     verifyObserver(sut, "updateSplit", ReportsSelectionEvent::class)
 
     sut.updateSplit(ReportsSelectionEvent(emptySet<Report>()))
@@ -200,7 +159,7 @@ class ReportsOverviewUITest {
     assertFalse(sut.split.isLocked)
 
     println("  -> Verify vertical split position reveals reports details when only one report is selected")
-    assertEquals(250f, sut.split.splitPosition)
+    assertEquals(287f, sut.split.splitPosition)
     assertEquals(PIXELS, sut.split.splitPositionUnit)
     assertTrue(sut.split.isSplitPositionReversed)
 

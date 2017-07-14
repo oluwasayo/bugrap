@@ -1,5 +1,12 @@
 package org.vaadin.bugrap.core
 
+import org.vaadin.bugrap.cdi.events.FilterChangeEvent
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
+import org.vaadin.bugrap.cdi.events.ReportsUpdateEvent
+import org.vaadin.bugrap.cdi.events.SearchEvent
+import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import org.vaadin.bugrap.domain.BugrapRepository
 import org.vaadin.bugrap.domain.BugrapRepository.ReportsQuery
 import org.vaadin.bugrap.domain.RepositorySearchFacade
@@ -7,12 +14,6 @@ import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.events.FilterChangeEvent
-import org.vaadin.bugrap.events.ProjectChangeEvent
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.ReportsSelectionEvent
-import org.vaadin.bugrap.events.SearchEvent
-import org.vaadin.bugrap.events.VersionChangeEvent
 import java.io.File
 import java.io.Serializable
 import javax.annotation.PostConstruct
@@ -51,7 +52,7 @@ class ApplicationModel() : Serializable {
   fun getSelectedReports() = selectedReports
 
   private var user: Reporter? = null
-  fun getUsername() = user
+  fun getUser() = user
 
   @Inject
   constructor(searchFacade: RepositorySearchFacade, filter: Filter, reportsRefreshEvent: Event<ReportsRefreshEvent>)
@@ -88,6 +89,12 @@ class ApplicationModel() : Serializable {
     if (fireEvent) reportsRefreshEvent.fire(ReportsRefreshEvent())
   }
 
+  fun refreshReports(@Observes event: ReportsUpdateEvent) {
+    if (event.reports.intersect(getReports()).isNotEmpty()) {
+      refreshReports()
+    }
+  }
+
   fun searchReports(@Observes event: SearchEvent) {
     val statuses = if (filter.statuses.isEmpty()) null else filter.statuses
     reports = HashSet(searchFacade.search(event.searchTerm, getSelectedProject(), getSelectedVersion(), statuses))
@@ -95,7 +102,7 @@ class ApplicationModel() : Serializable {
   }
 
   fun switchProject(@Observes event: ProjectChangeEvent) {
-    selectedProject = event.project!!
+    selectedProject = event.project
     updateVersionInfo()
     refreshReports()
   }
@@ -124,20 +131,29 @@ class ApplicationModel() : Serializable {
     init {
       // Horrible hack that allows me keep the web app running while clicking individual
       // test run in IDE without the two HSQL instances failing to acquire lock.
+      var dbExists = true
       try {
         dbDir = "${System.getProperty("user.home")}/.bugrap"
+        dbExists = File(dbDir).exists()
         bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
-        bugrapRepository.authenticate("developer", "developer")
+
+        if (!dbExists) {
+          println("Bugrap main DB not found in home directory. Generating test data...")
+          bugrapRepository.populateWithTestData()
+        }
       } catch (ex: Exception) {
         println("Main DB locked by another application instance. Falling back to test DB.")
         dbDir = "${System.getProperty("user.home")}/.bugrap_test"
+        dbExists = File(dbDir).exists()
         bugrapRepository = BugrapRepository("$dbDir/bugrap.db")
+
+        if (!dbExists) {
+          println("Bugrap test DB not found in home directory. Generating test data...")
+          bugrapRepository.populateWithTestData()
+        }
       }
 
-      if (!File(dbDir).exists()) {
-        println("Bugrap DB not found in home directory. Generating test data...")
-        bugrapRepository.populateWithTestData()
-      }
+      bugrapRepository.authenticate("developer", "developer")
     }
   }
 }

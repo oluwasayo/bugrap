@@ -54,10 +54,21 @@ const val UPDATE = "Update"
 const val REVERT = "Revert"
 
 const val SELECT_A_SINGLE_REPORT = "- Select a single report to view contents"
+const val UNKNOWN_REPORTER = "Unknown Reporter"
+const val UNKNOWN_COMMENTER = "Unknown Commenter"
+const val NO_VERSION = "No version"
+const val REPORT_DETAIL_NO_ID_ERROR = "Please specify the ID of the report to show."
+const val WRITE_A_COMMENT = "Write a comment..."
 
 const val ALIGN_BOTTOM = "align-bottom"
 
 const val NEW_WINDOW = "_blank"
 const val ICON_AFTER_CAPTION = "icon-after-caption"
+
+const val WRAP_LINE = "wrap-line"
+const val SCROLLABLE = "scrollable"
+const val NO_VISUAL_FOCUS = "no-visual-focus"
+const val NO_LEFT_PADDING = "no-left-padding"
+const val ATTACHMENT_BAR = "attachment-bar"
 
 const val CONTEXT_ROOT = "http://localhost:8080/"

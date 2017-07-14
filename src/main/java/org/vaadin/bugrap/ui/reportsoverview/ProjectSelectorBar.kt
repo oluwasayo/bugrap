@@ -11,12 +11,12 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Label
 import com.vaadin.ui.NativeSelect
 import com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.LOGOUT
 import org.vaadin.bugrap.core.ROUNDED_EAST
 import org.vaadin.bugrap.core.ROUNDED_WEST
 import org.vaadin.bugrap.domain.entities.Project
-import org.vaadin.bugrap.events.ProjectChangeEvent
 import javax.annotation.PostConstruct
 import javax.enterprise.context.SessionScoped
 import javax.enterprise.event.Event
@@ -27,16 +27,9 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ProjectSelectorBar() : CustomComponent() {
-
-  private lateinit var applicationModel: ApplicationModel
-  private lateinit var projectChangeEvent: Event<ProjectChangeEvent>
-
-  @Inject
-  constructor(applicationModel: ApplicationModel, projectChangeEvent: Event<ProjectChangeEvent>) : this() {
-    this.applicationModel = applicationModel
-    this.projectChangeEvent = projectChangeEvent
-  }
+class ProjectSelectorBar @Inject constructor(private val applicationModel: ApplicationModel,
+                                             private val projectChangeEvent: Event<ProjectChangeEvent>)
+  : CustomComponent() {
 
   @PostConstruct
   fun setup() {
@@ -54,7 +47,7 @@ class ProjectSelectorBar() : CustomComponent() {
       }
     }
 
-    val userLabel = Label("${USER.html} ${applicationModel.getUsername()}", HTML)
+    val userLabel = Label("${USER.html} ${applicationModel.getUser()}", HTML)
     val separator = Label(LINE_V.html, HTML)
     val logoutLabel = Label("${USER.html} ${LOGOUT}", HTML)
 

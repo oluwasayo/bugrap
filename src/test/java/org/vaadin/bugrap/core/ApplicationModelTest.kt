@@ -9,15 +9,24 @@ import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.isNotNull
 import com.nhaarman.mockito_kotlin.isNull
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.reset
 import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
+import org.vaadin.bugrap.cdi.events.FilterChangeEvent
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
+import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
+import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
+import org.vaadin.bugrap.cdi.events.ReportsUpdateEvent
+import org.vaadin.bugrap.cdi.events.SearchEvent
+import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import org.vaadin.bugrap.domain.BugrapRepository
 import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Project
@@ -25,12 +34,8 @@ import org.vaadin.bugrap.domain.entities.ProjectVersion
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.domain.entities.Report.Status
 import org.vaadin.bugrap.domain.entities.Reporter
-import org.vaadin.bugrap.events.FilterChangeEvent
-import org.vaadin.bugrap.events.ProjectChangeEvent
-import org.vaadin.bugrap.events.ReportsRefreshEvent
-import org.vaadin.bugrap.events.ReportsSelectionEvent
-import org.vaadin.bugrap.events.SearchEvent
-import org.vaadin.bugrap.events.VersionChangeEvent
+import org.vaadin.bugrap.ui.report1
+import org.vaadin.bugrap.ui.report2
 import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -55,6 +60,7 @@ class ApplicationModelTest {
       ApplicationModel.bugrapRepository = mock<BugrapRepository>().apply {
         doReturn(Reporter()).whenever(this).authenticate(anyString(), anyString())
         doReturn(setOf(projectB, projectA)).whenever(this).findProjects()
+        doReturn(setOf(report1, report2)).whenever(this).findReports(any())
       }
     }
   }
@@ -69,6 +75,9 @@ class ApplicationModelTest {
     sut.setup()
     reset(sut)
   }
+
+  @After
+  fun cleanup() = report1.author.setName(null)
 
   @Test
   fun setup() {
@@ -186,6 +195,23 @@ class ApplicationModelTest {
     sut.applyFilter(FilterChangeEvent())
 
     println("  -> Verify reports refreshed with updated filter")
+    verify(sut, times(1)).refreshReports()
+  }
+
+  @Test
+  fun refreshReports() {
+    println("refreshReports")
+
+    verifyObserver(sut, "refreshReports", ReportsUpdateEvent::class)
+
+    doNothing().whenever(sut).refreshReports()
+
+    println("  -> Verify reports not refreshed when updated report is not in working set")
+    sut.refreshReports(ReportsUpdateEvent(setOf(Report())))
+    verify(sut, never()).refreshReports()
+
+    println("  -> Verify reports refreshed when updated report is in working set")
+    sut.refreshReports(ReportsUpdateEvent(setOf(report1)))
     verify(sut, times(1)).refreshReports()
   }
 

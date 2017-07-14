@@ -3,7 +3,7 @@ bugrap  [![Build Status](https://travis-ci.org/sayo-vaadin/bugrap.svg?branch=mas
 
 An issue tracker developed with @Vaadin Framework!
 
-To run the application simply run `mvn jetty:run`
+To run the application simply run `mvn jetty:run` and visit `http://localhost:8080/home`
 
 To run all tests (requires Google Chrome): `mvn verify`
 

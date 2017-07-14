@@ -2,3 +2,4 @@
 target/
 *.iml
 phantomjsdriver.log
+src/main/webapp/VAADIN/themes/mytheme/styles.css

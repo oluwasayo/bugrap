@@ -7,7 +7,24 @@
   <artifactId>bugrap</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>bugrap</name>
+
+  <name>${project.artifactId}</name>
+  <description>An issue tracker developed with @Vaadin Framework</description>
+
+  <developers>
+    <developer>
+      <name>Sayo Oladeji</name>
+      <email>sayo [hart] vaain [dort] com</email>
+      <organization>Vaadin</organization>
+      <organizationUrl>http://www.vaadin.com</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/sayo-vaadin/bugrap.git</connection>
+    <developerConnection>scm:git:https://github.com/sayo-vaadin/bugrap.git</developerConnection>
+    <url>https://github.com/sayo-vaadin/bugrap.git</url>
+  </scm>
 
   <prerequisites>
     <maven>3</maven>
@@ -240,22 +257,38 @@
             <artifactId>kotlin-maven-allopen</artifactId>
             <version>${kotlin.version}</version>
           </dependency>
+          <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-noarg</artifactId>
+            <version>${kotlin.version}</version>
+          </dependency>
         </dependencies>
 
         <configuration>
           <compilerPlugins>
             <plugin>all-open</plugin>
+            <plugin>no-arg</plugin>
           </compilerPlugins>
 
           <pluginOptions>
             <option>all-open:annotation=javax.inject.Named</option>
+            <option>no-arg:annotation=javax.inject.Named</option>
             <option>all-open:annotation=javax.annotation.ManagedBean</option>
+            <option>no-arg:annotation=javax.annotation.ManagedBean</option>
             <option>all-open:annotation=javax.enterprise.context.ApplicationScoped</option>
+            <option>no-arg:annotation=javax.enterprise.context.ApplicationScoped</option>
             <option>all-open:annotation=javax.enterprise.context.ConversationScoped</option>
+            <option>no-arg:annotation=javax.enterprise.context.ConversationScoped</option>
             <option>all-open:annotation=javax.enterprise.context.Dependent</option>
+            <option>no-arg:annotation=javax.enterprise.context.Dependent</option>
             <option>all-open:annotation=javax.enterprise.context.RequestScoped</option>
+            <option>no-arg:annotation=javax.enterprise.context.RequestScoped</option>
             <option>all-open:annotation=javax.enterprise.context.SessionScoped</option>
+            <option>no-arg:annotation=javax.enterprise.context.SessionScoped</option>
             <option>all-open:annotation=com.vaadin.cdi.CDIUI</option>
+            <option>no-arg:annotation=com.vaadin.cdi.CDIUI</option>
+            <option>all-open:annotation=org.vaadin.bugrap.cdi.Proxyable</option>
+            <option>no-arg:annotation=org.vaadin.bugrap.cdi.Proxyable</option>
           </pluginOptions>
         </configuration>
 

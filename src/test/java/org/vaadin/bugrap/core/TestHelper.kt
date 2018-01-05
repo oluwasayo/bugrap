@@ -16,5 +16,4 @@ fun <T : Any> verifyObserver(sut: T, function: String, event: KClass<*>) {
   assertTrue(parameter.isAnnotationPresent(Observes::class.java))
 }
 
-inline fun <reified T : Any> verifyObserver(sut: Any, function: String, event: Class<T>)
-    = verifyObserver(sut, function, event.kotlin)
+inline fun <reified T : Any> verifyObserver(sut: Any, function: String) = verifyObserver(sut, function, T::class)

@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.vaadin.oluwasayo</groupId>
+  <groupId>com.vaadin.oluwasayo</groupId>
   <artifactId>bugrap</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
@@ -14,16 +14,16 @@
   <developers>
     <developer>
       <name>Sayo Oladeji</name>
-      <email>sayo [hart] vaain [dort] com</email>
+      <email>sayo [hart] vaadin [dort] com</email>
       <organization>Vaadin</organization>
       <organizationUrl>http://www.vaadin.com</organizationUrl>
     </developer>
   </developers>
 
   <scm>
-    <connection>scm:git:https://github.com/sayo-vaadin/bugrap.git</connection>
-    <developerConnection>scm:git:https://github.com/sayo-vaadin/bugrap.git</developerConnection>
-    <url>https://github.com/sayo-vaadin/bugrap.git</url>
+    <connection>scm:git:https://github.com/oluwasayo/bugrap.git</connection>
+    <developerConnection>scm:git:https://github.com/oluwasayo/bugrap.git</developerConnection>
+    <url>https://github.com/oluwasayo/bugrap.git</url>
   </scm>
 
   <prerequisites>
@@ -34,7 +34,7 @@
     <vaadin.version>8.0.6</vaadin.version>
     <vaadin.plugin.version>8.0.6</vaadin.plugin.version>
     <vaadin.testbench.version>5.0.0</vaadin.testbench.version>
-    <kotlin.version>1.1.2-4</kotlin.version>
+    <kotlin.version>1.2.10</kotlin.version>
     <jetty.plugin.version>9.3.9.v20160517</jetty.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -93,7 +93,7 @@
     <dependency>
       <groupId>org.jboss.weld.servlet</groupId>
       <artifactId>weld-servlet</artifactId>
-      <version>2.4.0.Final</version>
+      <version>2.4.6.Final</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -210,12 +210,11 @@
         <version>${jetty.plugin.version}</version>
         <configuration>
           <scanIntervalSeconds>5</scanIntervalSeconds>
+          <contextXml>src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
           <webApp>
             <overrideDescriptor>src/main/webapp/WEB-INF/web-add.xml</overrideDescriptor>
             <jettyEnvXml>src/main/webapp/WEB-INF/jetty-env.xml</jettyEnvXml>
           </webApp>
-
-          <contextXml>src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
         </configuration>
 
         <executions>
@@ -271,10 +270,8 @@
           </compilerPlugins>
 
           <pluginOptions>
-            <option>all-open:annotation=javax.inject.Named</option>
-            <option>no-arg:annotation=javax.inject.Named</option>
-            <option>all-open:annotation=javax.annotation.ManagedBean</option>
-            <option>no-arg:annotation=javax.annotation.ManagedBean</option>
+            <option>all-open:annotation=org.vaadin.bugrap.cdi.Proxyable</option>
+            <option>no-arg:annotation=org.vaadin.bugrap.cdi.Proxyable</option>
             <option>all-open:annotation=javax.enterprise.context.ApplicationScoped</option>
             <option>no-arg:annotation=javax.enterprise.context.ApplicationScoped</option>
             <option>all-open:annotation=javax.enterprise.context.ConversationScoped</option>
@@ -287,8 +284,6 @@
             <option>no-arg:annotation=javax.enterprise.context.SessionScoped</option>
             <option>all-open:annotation=com.vaadin.cdi.CDIUI</option>
             <option>no-arg:annotation=com.vaadin.cdi.CDIUI</option>
-            <option>all-open:annotation=org.vaadin.bugrap.cdi.Proxyable</option>
-            <option>no-arg:annotation=org.vaadin.bugrap.cdi.Proxyable</option>
           </pluginOptions>
         </configuration>
 

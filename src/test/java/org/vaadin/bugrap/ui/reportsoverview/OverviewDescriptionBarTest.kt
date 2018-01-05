@@ -14,11 +14,9 @@ import org.vaadin.bugrap.core.Clock
 import org.vaadin.bugrap.core.Filter
 import org.vaadin.bugrap.core.userFriendlyTimeDiff
 import org.vaadin.bugrap.core.verifyObserver
-import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.ui.report1
 import org.vaadin.bugrap.ui.report2
-import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -32,7 +30,7 @@ class OverviewDescriptionBarTest {
 
   @Before
   fun init() {
-    appModel = spy(ApplicationModel(mock<RepositorySearchFacade>(), Filter(), mock<Event<ReportsRefreshEvent>>()))
+    appModel = spy(ApplicationModel(mock(), Filter(), mock()))
     sut = OverviewDescriptionBar(appModel)
     Clock.unfreeze()
   }
@@ -50,7 +48,7 @@ class OverviewDescriptionBarTest {
     verifyObserver(sut, "updateUI", ReportsSelectionEvent::class)
 
     println("  -> Verify is invisible when no reports are selected")
-    sut.updateUI(ReportsSelectionEvent(emptySet<Report>()))
+    sut.updateUI(ReportsSelectionEvent(emptySet()))
     assertFalse(sut.isVisible)
 
     println("  -> Verify is visible when a single report is selected")

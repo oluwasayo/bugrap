@@ -72,7 +72,7 @@ class ReportsOverviewUI @Inject constructor(
 
       addItemClickListener {
         if (it.mouseEventDetails.isDoubleClick) {
-          page.open(ExternalResource(CONTEXT_ROOT + "detail?id=" + it.item.id), NEW_WINDOW, false)
+          page.open(ExternalResource("${CONTEXT_ROOT}detail?id=${it.item.id}"), NEW_WINDOW, false)
         }
       }
 

@@ -20,7 +20,7 @@ import com.vaadin.ui.themes.ValoTheme.BUTTON_TINY
 import org.vaadin.bugrap.cdi.events.ReportsUpdateEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.ApplicationModel.Companion.bugrapRepository
-import org.vaadin.bugrap.core.Clock.Companion.currentTimeAsDate
+import org.vaadin.bugrap.core.Clock.currentTimeAsDate
 import org.vaadin.bugrap.core.NO_VERSION
 import org.vaadin.bugrap.core.REPORT_DETAIL_NO_ID_ERROR
 import org.vaadin.bugrap.core.SCROLLABLE
@@ -45,7 +45,6 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.PrintWriter
 import javax.enterprise.event.Observes
-import javax.enterprise.event.Reception
 import javax.enterprise.event.Reception.IF_EXISTS
 import javax.inject.Inject
 import javax.persistence.NoResultException
@@ -170,6 +169,7 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
           }
 
           controlsBar.addComponent(upload)
+          // TODO(oluwasayo): You can do better.
           JavaScript.getCurrent().execute("document.getElementsByClassName('gwt-FileUpload')[0].click()")
           doneButton.focus()
         }
@@ -223,17 +223,13 @@ class ReportDetailUI @Inject constructor(private val propertiesBar: SingleReport
       throw IllegalArgumentException("Invalid report ID ${idParam}. Please specify a numeric value.", ex)
     }
 
-    val report = bugrapRepository.getReportById(reportId)
-    if (report == null) {
-      throw NoResultException("Report ${reportId} not found. Please double-check.")
-    }
-
-    return report
+    return bugrapRepository.getReportById(reportId)
+        ?: throw NoResultException("Report ${reportId} not found. Please double-check.")
   }
 
   fun updateUI(@Observes(notifyObserver = IF_EXISTS) event: ReportsUpdateEvent) {
     if (event.reports.contains(report)) {
-      report = event.reports.filter { it.id == report.id }.first()
+      report = event.reports.first { it.id == report.id }
     }
 
     updateUI()

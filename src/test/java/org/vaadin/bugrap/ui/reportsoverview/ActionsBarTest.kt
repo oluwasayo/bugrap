@@ -11,17 +11,13 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
-import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
-import org.vaadin.bugrap.cdi.events.SearchEvent
 import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.Filter
 import org.vaadin.bugrap.core.verifyObserver
 import org.vaadin.bugrap.domain.BugrapRepository
-import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
-import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 
 /**
@@ -47,9 +43,9 @@ class ActionsBarTest {
 
   @Before
   fun init() {
-    appModel = spy(ApplicationModel(mock<RepositorySearchFacade>(), Filter(), mock<Event<ReportsRefreshEvent>>()))
+    appModel = spy(ApplicationModel(mock(), Filter(), mock()))
     appModel.setup()
-    sut = spy(ActionsBar(appModel, mock<Event<SearchEvent>>()))
+    sut = spy(ActionsBar(appModel, mock()))
   }
 
   @Test
@@ -81,7 +77,7 @@ class ActionsBarTest {
   fun updateReportCount_projectChange() {
     println("updateReportCount_projectChange")
 
-    verifyObserver(sut, "updateReportCount", ProjectChangeEvent::class)
+    verifyObserver<ProjectChangeEvent>(sut, "updateReportCount")
 
     doReturn("25").whenever(sut).countReports()
 

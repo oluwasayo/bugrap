@@ -9,13 +9,11 @@ import org.junit.Before
 import org.junit.Test
 import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
 import org.vaadin.bugrap.cdi.events.ReportsSelectionEvent
-import org.vaadin.bugrap.cdi.events.ReportsUpdateEvent
 import org.vaadin.bugrap.core.CONTEXT_ROOT
 import org.vaadin.bugrap.core.verifyObserver
 import org.vaadin.bugrap.domain.entities.Report
 import org.vaadin.bugrap.ui.report1
 import org.vaadin.bugrap.ui.report2
-import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -29,7 +27,7 @@ class MultiReportPropertiesBarTest {
 
   @Before
   fun init() {
-    sut = spy(MultiReportPropertiesBar(mock<Event<ReportsRefreshEvent>>(), mock<Event<ReportsUpdateEvent>>()))
+    sut = spy(MultiReportPropertiesBar(mock()))
   }
 
   @Test
@@ -100,7 +98,7 @@ class MultiReportPropertiesBarTest {
     assertEquals(report1.assigned, sut.assigneeControl.selectedItem.get())
 
     println("  -> Verify controls are unselected when values are different across selected reports")
-    assertFalse(sut.statusControl.selectedItem.isPresent())
+    assertFalse(sut.statusControl.selectedItem.isPresent)
     assertFalse(sut.versionControl.selectedItem.isPresent)
   }
 

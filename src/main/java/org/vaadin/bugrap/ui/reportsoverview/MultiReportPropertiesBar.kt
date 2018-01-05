@@ -26,8 +26,7 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class MultiReportPropertiesBar @Inject constructor(private val reportsRefreshEvent: Event<ReportsRefreshEvent>,
-                                                   reportsUpdateEvent: Event<ReportsUpdateEvent>)
+class MultiReportPropertiesBar @Inject constructor(reportsUpdateEvent: Event<ReportsUpdateEvent>)
   : AbstractPropertiesBar(reportsUpdateEvent) {
 
   internal val newWindowLink = Link()

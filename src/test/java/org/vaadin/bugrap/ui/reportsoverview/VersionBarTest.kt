@@ -14,18 +14,14 @@ import com.vaadin.server.Sizeable.Unit.PERCENTAGE
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
 import org.vaadin.bugrap.core.ApplicationModel
 import org.vaadin.bugrap.core.Filter
 import org.vaadin.bugrap.core.verifyObserver
 import org.vaadin.bugrap.domain.BugrapRepository
-import org.vaadin.bugrap.domain.RepositorySearchFacade
 import org.vaadin.bugrap.domain.entities.Project
 import org.vaadin.bugrap.domain.entities.ProjectVersion
-import org.vaadin.bugrap.cdi.events.ProjectChangeEvent
-import org.vaadin.bugrap.cdi.events.ReportsRefreshEvent
-import org.vaadin.bugrap.cdi.events.VersionChangeEvent
 import java.util.stream.Collectors.toSet
-import javax.enterprise.event.Event
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
@@ -47,16 +43,16 @@ class VersionBarTest {
     fun setupRepo() {
       ApplicationModel.bugrapRepository = mock<BugrapRepository>().apply {
         doReturn(setOf(Project())).whenever(this).findProjects()
-        doReturn(setOf(version1, version2)).whenever(this).findProjectVersions(any<Project>())
+        doReturn(setOf(version1, version2)).whenever(this).findProjectVersions(any())
       }
     }
   }
 
   @Before
   fun init() {
-    appModel = spy(ApplicationModel(mock<RepositorySearchFacade>(), Filter(), mock<Event<ReportsRefreshEvent>>()))
+    appModel = spy(ApplicationModel(mock(), Filter(), mock()))
     appModel.setup()
-    sut = spy(VersionBar(appModel, mock<Event<VersionChangeEvent>>()))
+    sut = spy(VersionBar(appModel, mock()))
   }
 
   @Test
@@ -72,7 +68,7 @@ class VersionBarTest {
     assertFalse(sut.versionSelector.selectedItem.isPresent)
 
     println("  -> Verify versions for selected projects are fetched from repository")
-    verify(ApplicationModel.bugrapRepository, atLeastOnce()).findProjectVersions(any<Project>())
+    verify(ApplicationModel.bugrapRepository, atLeastOnce()).findProjectVersions(any())
 
     println("  -> Verify fetched versions applied to version selector")
     val data = (sut.versionSelector.dataProvider as DataProvider<ProjectVersion, Any>).fetch(Query()).collect(toSet())

@@ -27,11 +27,10 @@ import javax.inject.Inject
  * @author oladeji
  */
 @SessionScoped
-class ApplicationModel() : Serializable {
-
-  private lateinit var searchFacade: RepositorySearchFacade
-  private lateinit var filter: Filter
-  private lateinit var reportsRefreshEvent: Event<ReportsRefreshEvent>
+class ApplicationModel @Inject constructor(
+    private val searchFacade: RepositorySearchFacade,
+    private val filter: Filter,
+    private val reportsRefreshEvent: Event<ReportsRefreshEvent>) : Serializable {
 
   private lateinit var projects: List<Project>
   fun getProjects() = projects
@@ -53,14 +52,6 @@ class ApplicationModel() : Serializable {
 
   private var user: Reporter? = null
   fun getUser() = user
-
-  @Inject
-  constructor(searchFacade: RepositorySearchFacade, filter: Filter, reportsRefreshEvent: Event<ReportsRefreshEvent>)
-      : this() {
-    this.searchFacade = searchFacade
-    this.filter = filter
-    this.reportsRefreshEvent = reportsRefreshEvent
-  }
 
   @PostConstruct
   fun setup() {

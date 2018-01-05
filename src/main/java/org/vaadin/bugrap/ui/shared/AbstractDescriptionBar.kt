@@ -24,7 +24,7 @@ import javax.annotation.PostConstruct
  * @author oladeji
  */
 @Proxyable
-abstract class AbstractDescriptionBar() : CustomComponent() {
+abstract class AbstractDescriptionBar : CustomComponent() {
 
   internal val infoLabel = Label()
   internal val descriptionArea = TextArea()

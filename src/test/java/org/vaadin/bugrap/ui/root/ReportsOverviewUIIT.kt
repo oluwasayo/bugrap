@@ -16,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.chrome.ChromeOptions
 import org.vaadin.bugrap.core.ALL_KINDS
 import org.vaadin.bugrap.core.EVERYONE
 import org.vaadin.bugrap.core.MENUBAR_THEMED
@@ -43,10 +42,6 @@ class ReportsOverviewUIIT : TestBenchTestCase() {
 
     setDriver(ChromeDriver())
     getDriver().manage().window().size = Dimension(1600, 1024)
-
-//    System.setProperty("phantomjs.ghostdriver.path", "")
-//    System.setProperty("phantomjs.binary.path", "")
-//    setDriver(TestBench.createDriver(PhantomJSDriver(DesiredCapabilities.phantomjs())))
 
     driver.get("http://localhost:8080/home")
   }
@@ -81,7 +76,7 @@ class ReportsOverviewUIIT : TestBenchTestCase() {
   fun testVersionSelector() {
     println("testVersionSelector")
 
-    println("  -> Verfiy version column contains multiple versions")
+    println("  -> Verify version column contains multiple versions")
     assertTrue(select<GridElement>().first().rows.map { it.getCell(1).text }.distinct().size > 1)
 
     println("  -> Verify version column disappears on version selection")
@@ -98,12 +93,13 @@ class ReportsOverviewUIIT : TestBenchTestCase() {
     println("testSearch")
 
     println("  -> Verify all reports in grid match search term")
-    select<TextFieldElement>().first().setValue("report")
-    select<GridElement>().first().rows.map { it.getCell(6).text }.forEach {
-      assertTrue(it.contains("report"))
-    }
+    select<TextFieldElement>().first().sendKeys("report")
+    select<GridElement>().first()
+        .rows
+        .map { it.getCell(6).text }
+        .forEach { assertTrue(it.contains("report")) }
 
-    println("  -> Verify clear search botton clears search field")
+    println("  -> Verify clear search button clears search field")
     select<ButtonElement>().first().click()
     assertTrue(select<TextFieldElement>().first().value.isEmpty())
   }
@@ -161,7 +157,7 @@ class ReportsOverviewUIIT : TestBenchTestCase() {
     println("  -> Verify custom filter works")
     select<MenuBarElement>().first().click()
     select<MenuBarElement>().first().waitForVaadin()
-    Thread.sleep(1000) // Horrible hack as the waitForVaadin above did you help matters.
+    Thread.sleep(1000) // Horrible hack as the waitForVaadin above did not help matters.
     select<MenuBarElement>().first().clickItem(INVALID.toString())
     statuses = select<GridElement>().first().rows.map { it.getCell(5).text }.distinct()
     assertEquals(1, statuses.size)

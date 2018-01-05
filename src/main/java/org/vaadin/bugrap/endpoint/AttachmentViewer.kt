@@ -16,16 +16,16 @@ import javax.servlet.http.HttpServletResponse
 /**
  * @author oladeji
  */
-@WebServlet(name = "AttachmentViewer", urlPatterns = arrayOf("/attachment"))
+@WebServlet(name = "AttachmentViewer", urlPatterns = ["/attachment"])
 class AttachmentViewer : HttpServlet() {
 
   @Throws(ServletException::class, IOException::class)
   override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
     val file = File(request.getParameter("file").substring(1))
     val downloadName = removeTimestampFromFileName(file.name)
-    response.setHeader("Content-Disposition", "inline; filename=\"$downloadName\"");
+    response.setHeader("Content-Disposition", "inline; filename=\"$downloadName\"")
     BufferedReader(FileReader(File("${file.name}.mime"))).use {
-      response.setContentType("${it.readLine()}; name=\"$downloadName\"");
+      response.contentType = "${it.readLine()}; name=\"$downloadName\""
     }
 
     BufferedInputStream(FileInputStream(file)).use {

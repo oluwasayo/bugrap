@@ -8,4 +8,4 @@ import javax.enterprise.context.Dependent
  * @author oladeji
  */
 @Dependent
-class DetailDescriptionBar() : AbstractDescriptionBar()
+class DetailDescriptionBar : AbstractDescriptionBar()
